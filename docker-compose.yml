@@ -1,0 +1,32 @@
+version: '2'
+
+services:
+  core:
+    build:
+      context: ./core
+    command: dotnet watch /var/www/core/bin/Release/netcoreapp2.0/Tochka.dll
+    depends_on:
+      - db
+    expose:
+      - 5000
+    image: "core"
+    volumes:
+     - /AspNetCore2/core:/var/www/core
+
+  db:
+    environment:
+      POSTGRES_PASSWORD: password
+    image: postgres:10
+    ports:
+      - 5432:5432
+    volumes:
+      - /AspNetCore2/db/:/var/lib/postgresql/data
+
+  proxy-server:
+    build:
+      context: ./proxy-server
+    depends_on:
+      - core
+    image: "proxy-server"
+    ports:
+      - 80:80
