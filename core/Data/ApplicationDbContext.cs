@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Tochka.Areas.Hr.Data;
 using Tochka.Models;
 
 namespace Tochka.Data
@@ -18,5 +19,7 @@ namespace Tochka.Data
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
         }
+
+        public DbSet<Vacancy> Vacancies { get; set; }
     }
 }
