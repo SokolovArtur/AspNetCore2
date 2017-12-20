@@ -1,1 +1,10 @@
-﻿
+﻿/* SimpleMDE */
+.editor-toolbar.fullscreen {
+    top: 43px;
+}
+.CodeMirror-fullscreen {
+    top: 93px;
+}
+.editor-preview-side {
+    top: 93px;
+}

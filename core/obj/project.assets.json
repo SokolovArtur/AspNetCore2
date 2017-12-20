@@ -13207,11 +13207,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/var/www/core2/Tochka.csproj",
+      "projectUniqueName": "/var/www/core/Tochka.csproj",
       "projectName": "Tochka",
-      "projectPath": "/var/www/core2/Tochka.csproj",
+      "projectPath": "/var/www/core/Tochka.csproj",
       "packagesPath": "/root/.nuget/packages/",
-      "outputPath": "/var/www/core2/obj/",
+      "outputPath": "/var/www/core/obj/",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "/usr/share/dotnet/sdk/NuGetFallbackFolder"

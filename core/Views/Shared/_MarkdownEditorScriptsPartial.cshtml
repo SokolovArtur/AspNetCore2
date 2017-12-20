@@ -1,0 +1,18 @@
+﻿<environment include="Development">
+    <script src="~/lib/simplemde/dist/simplemde.min.js"></script>
+</environment>
+<environment exclude="Development">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/simplemde/1.11.2/simplemde.min.js"
+            asp-fallback-src="~/lib/simplemde/dist/simplemde.min.js"
+            asp-fallback-test="window.SimpleMDE"
+            crossorigin="anonymous"
+            integrity="sha256-6sZs7OGP0Uzcl7UDsLaNsy1K0KTZx1+6yEVrRJMn2IM=">
+    </script>
+</environment>
+
+<script>
+    var simplemde = [];
+    $("main textarea").each(function (index) {
+        simplemde[index] = new SimpleMDE({ element: document.getElementById($(this).attr("id")) });
+    });
+</script>

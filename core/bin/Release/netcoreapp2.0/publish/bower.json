@@ -4,6 +4,7 @@
   "dependencies": {
     "MDBootstrap": "4.4.1",
     "Font-Awesome": "v4.7.0",
-    "jquery-validation-unobtrusive": "v3.2.6"
+    "jquery-validation-unobtrusive": "v3.2.6",
+    "simplemde": "1.11.2"
   }
 }

@@ -17,14 +17,14 @@
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-            <div class="md-form">
+            <div class="form-group">
                 <label asp-for="Annotation"></label>
-                <textarea type="text" asp-for="Annotation" class="md-textarea" rows="5"></textarea>
+                <textarea type="text" asp-for="Annotation" class="form-control" rows="5"></textarea>
                 <span asp-validation-for="Annotation" class="text-danger"></span>
             </div>
-            <div class="md-form">
+            <div class="form-group">
                 <label asp-for="Text"></label>
-                <textarea type="text" asp-for="Text" class="md-textarea" rows="5"></textarea>
+                <textarea type="text" asp-for="Text" class="form-control" rows="5"></textarea>
                 <span asp-validation-for="Text" class="text-danger"></span>
             </div>
             <div>
@@ -37,6 +37,11 @@
     </div>
 </div>
 
+@section StyleSheet {
+    @{Html.RenderPartial("_MarkdownEditorStyleSheetPartial");}
+}
+
 @section Scripts {
+    @{Html.RenderPartial("_MarkdownEditorScriptsPartial");}
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

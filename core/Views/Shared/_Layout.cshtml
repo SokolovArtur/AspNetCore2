@@ -6,21 +6,28 @@
     <title>@ViewData["Title"] - Tochka</title>
 
     <environment include="Development">
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/lib/Font-Awesome/css/font-awesome.min.css" />
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/lib/MDBootstrap/css/mdb.css" />
-        <link rel="stylesheet" href="~/css/site.css" />
     </environment>
     <environment exclude="Development">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
-              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
-              asp-fallback-test-class="modal" asp-fallback-test-property="position" asp-fallback-test-value="fixed" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
               asp-fallback-href="~/lib/Font-Awesome/css/font-awesome.css"
               asp-fallback-test-class="fa" asp-fallback-test-property="font" asp-fallback-test-value="normal normal normal 14px/1 FontAwesome" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
+              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+              asp-fallback-test-class="modal" asp-fallback-test-property="position" asp-fallback-test-value="fixed" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.4.1/css/mdb.min.css"
               asp-fallback-href="~/lib/MDBootstrap/css/mdb.min.css"
               asp-fallback-test-class="picker" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+    </environment>
+
+    @RenderSection("StyleSheet", required: false)
+
+    <environment include="Development">
+        <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    </environment>
+    <environment exclude="Development">
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
 </head>
@@ -42,10 +49,9 @@
 
         </nav>
         <!--/. Navbar -->
-
         <!-- Sidebar navigation -->
         <div id="slide-out" class="side-nav fixed sn-bg-4">
-            
+
             <ul class="custom-scrollbar list-unstyled">
 
                 <!-- Logo -->
@@ -57,7 +63,6 @@
                     </div>
                 </li>
                 <!--/. Logo -->
-
                 <!-- Search Form -->
                 <li>
                     <form class="search-form" role="search">
@@ -67,7 +72,6 @@
                     </form>
                 </li>
                 <!--/. Search Form -->
-
                 <!-- Side navigation links -->
                 <li>
                     <ul class="collapsible collapsible-accordion">
@@ -101,7 +105,6 @@
 
     </header>
     <!--/. Main Navigation-->
-
     <!-- Main layout -->
     <main>
         <div class="container-fluid">
@@ -109,7 +112,6 @@
         </div>
     </main>
     <!--/. Main layout -->
-
     <!-- Footer -->
     <footer class="page-footer center-on-small-only">
 
@@ -126,10 +128,9 @@
 
     <environment include="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/lib/popper.js/dist/popper.js"></script>
+        <script src="~/lib/popper.js/dist/umd/popper.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
         <script src="~/lib/MDBootstrap/js/mdb.js"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>
     </environment>
     <environment exclude="Development">
         <script src="https://code.jquery.com/jquery-3.2.1.min.js"
@@ -139,7 +140,7 @@
                 integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=">
         </script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.13.0/esm/popper.min.js"
-                asp-fallback-src="~/lib/popper.js/dist/popper.min.js"
+                asp-fallback-src="~/lib/popper.js/dist/umd/popper.min.js"
                 asp-fallback-test="window.Popper"
                 crossorigin="anonymous"
                 integrity="sha256-tWDaEmVqcf3+EBjNCtfZSFaWGT++lmVJH9KY64BJU+U=">
@@ -156,9 +157,15 @@
                 crossorigin="anonymous"
                 integrity="sha256-ryJ2fPnVdJ0kcED8zYEreV77dcLLV4evQHK/j8bwhhk=">
         </script>
-        <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
 
     @RenderSection("Scripts", required: false)
+
+    <environment include="Development">
+        <script src="~/js/site.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/site.min.js" asp-append-version="true"></script>
+    </environment>
 </body>
 </html>

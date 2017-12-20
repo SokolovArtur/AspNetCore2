@@ -1,0 +1,8 @@
+﻿<environment include="Development">
+    <link rel="stylesheet" href="~/lib/simplemde/dist/simplemde.min.css" />
+</environment>
+<environment exclude="Development">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplemde/1.11.2/simplemde.min.css"
+          asp-fallback-href="~/lib/simplemde/dist/simplemde.min.css"
+          asp-fallback-test-class="editor-toolbar" asp-fallback-test-property="position" asp-fallback-test-value="relative" />
+</environment>
