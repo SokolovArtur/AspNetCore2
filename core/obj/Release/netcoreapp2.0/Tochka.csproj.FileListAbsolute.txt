@@ -1,0 +1,10 @@
+/var/www/core2/bin/Release/netcoreapp2.0/Tochka.deps.json
+/var/www/core2/bin/Release/netcoreapp2.0/Tochka.runtimeconfig.json
+/var/www/core2/bin/Release/netcoreapp2.0/Tochka.runtimeconfig.dev.json
+/var/www/core2/bin/Release/netcoreapp2.0/Tochka.dll
+/var/www/core2/bin/Release/netcoreapp2.0/Tochka.pdb
+/var/www/core2/obj/Release/netcoreapp2.0/Tochka.csproj.CoreCompileInputs.cache
+/var/www/core2/obj/Release/netcoreapp2.0/Tochka.AssemblyInfoInputs.cache
+/var/www/core2/obj/Release/netcoreapp2.0/Tochka.AssemblyInfo.cs
+/var/www/core2/obj/Release/netcoreapp2.0/Tochka.dll
+/var/www/core2/obj/Release/netcoreapp2.0/Tochka.pdb

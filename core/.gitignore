@@ -19,7 +19,13 @@ x64/
 x86/
 bld/
 [Bb]in/
+![Bb]in/Release/*
 [Oo]bj/
+![Oo]bj/Release/*
+![Oo]bj/project.assets.json
+![Oo]bj/Tochka.csproj.nuget.cache
+![Oo]bj/Tochka.csproj.nuget.g.props
+![Oo]bj/Tochka.csproj.nuget.g.targets
 [Ll]og/
 
 # Visual Studio 2015 cache/options directory
