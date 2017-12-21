@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.0",
-    "signature": "7f49fc3fbb775947aba9350ac6fbbee75d52b124"
+    "signature": "3ae8f580d7cf6a72d2a2b04db28bfb38402e2e43"
   },
   "compilationOptions": {
     "defines": [
@@ -23,6 +23,7 @@
     ".NETCoreApp,Version=v2.0": {
       "Tochka/1.0.0": {
         "dependencies": {
+          "CommonMark.NET": "0.15.1",
           "Microsoft.AspNetCore.All": "2.0.3",
           "Microsoft.EntityFrameworkCore.Tools": "2.0.1",
           "Microsoft.Extensions.SecretManager.Tools": "2.0.0",
@@ -35,6 +36,14 @@
         },
         "compile": {
           "Tochka.dll": {}
+        }
+      },
+      "CommonMark.NET/0.15.1": {
+        "runtime": {
+          "lib/netstandard1.0/CommonMark.dll": {}
+        },
+        "compile": {
+          "lib/netstandard1.0/CommonMark.dll": {}
         }
       },
       "Libuv/1.10.0": {
@@ -4277,6 +4286,13 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "CommonMark.NET/0.15.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-xgAvZ0tNcupiabTcOOvNYRzU7h9dZ28xIFh/CHiNgCI6GUu/ME2hmZP3abLgRFrnXyNBfVxfL4ZNmqkRnBSLEg==",
+      "path": "commonmark.net/0.15.1",
+      "hashPath": "commonmark.net.0.15.1.nupkg.sha512"
     },
     "Libuv/1.10.0": {
       "type": "package",

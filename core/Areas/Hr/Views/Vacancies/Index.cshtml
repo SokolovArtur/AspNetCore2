@@ -32,10 +32,10 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Annotation)
+                <markdown value="@item.Annotation" />
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Text)
+                <markdown value="@item.Text" />
             </td>
             <td>
                 <a asp-area="Hr" asp-controller="Vacancies" asp-action="Edit" asp-route-id="@item.Id" title="Edit"><i class="fa fa-pencil-square-o"></i></a>

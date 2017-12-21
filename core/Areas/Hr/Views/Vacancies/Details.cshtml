@@ -26,13 +26,13 @@
                 @Html.DisplayNameFor(model => model.Annotation)
             </dt>
             <dd>
-                @Html.DisplayFor(model => model.Annotation)
+                <markdown value="@Model.Annotation" />
             </dd>
             <dt>
                 @Html.DisplayNameFor(model => model.Text)
             </dt>
             <dd>
-                @Html.DisplayFor(model => model.Text)
+                <markdown value="@Model.Text" />
             </dd>
         </dl>
 

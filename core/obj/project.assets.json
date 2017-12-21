@@ -2,6 +2,15 @@
   "version": 3,
   "targets": {
     ".NETCoreApp,Version=v2.0": {
+      "CommonMark.NET/0.15.1": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard1.0/CommonMark.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.0/CommonMark.dll": {}
+        }
+      },
       "Libuv/1.10.0": {
         "type": "package",
         "dependencies": {
@@ -5073,6 +5082,34 @@
     }
   },
   "libraries": {
+    "CommonMark.NET/0.15.1": {
+      "sha512": "xgAvZ0tNcupiabTcOOvNYRzU7h9dZ28xIFh/CHiNgCI6GUu/ME2hmZP3abLgRFrnXyNBfVxfL4ZNmqkRnBSLEg==",
+      "type": "package",
+      "path": "commonmark.net/0.15.1",
+      "files": [
+        "LICENSE.md",
+        "commonmark.net.0.15.1.nupkg.sha512",
+        "commonmark.net.nuspec",
+        "lib/net20/CommonMark.dll",
+        "lib/net20/CommonMark.pdb",
+        "lib/net35-client/CommonMark.dll",
+        "lib/net35-client/CommonMark.pdb",
+        "lib/net40-client/CommonMark.dll",
+        "lib/net40-client/CommonMark.pdb",
+        "lib/net45/CommonMark.dll",
+        "lib/net45/CommonMark.pdb",
+        "lib/netstandard1.0/CommonMark.dll",
+        "lib/netstandard1.0/CommonMark.pdb",
+        "lib/portable-net40+sl50+wp80+win+wpa81+MonoAndroid10+MonoTouch10/CommonMark.dll",
+        "lib/portable-net40+sl50+wp80+win+wpa81+MonoAndroid10+MonoTouch10/CommonMark.pdb",
+        "lib/portable-net40+sl50+wp80+win+wpa81+MonoAndroid10+MonoTouch10/CommonMark.xml",
+        "lib/portable-net45+wp80+win+wpa81+MonoAndroid10+xamarinios10+MonoTouch10/CommonMark.dll",
+        "lib/portable-net45+wp80+win+wpa81+MonoAndroid10+xamarinios10+MonoTouch10/CommonMark.pdb",
+        "lib/portable-net45+wp80+win+wpa81+MonoAndroid10+xamarinios10+MonoTouch10/CommonMark.xml",
+        "tools/cmark.exe",
+        "tools/cmark.exe.config"
+      ]
+    },
     "Libuv/1.10.0": {
       "sha512": "GsCf4q+eyaI49rCPlgYxdxa1SQCysXFFdSJWdstrwxytg4+VPYLYrXD4AT2rjHVJ+UF7SSWX9CapWEYaU4ejVQ==",
       "type": "package",
@@ -13192,6 +13229,7 @@
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v2.0": [
+      "CommonMark.NET >= 0.15.1",
       "Microsoft.AspNetCore.All >= 2.0.3",
       "Microsoft.EntityFrameworkCore.Tools >= 2.0.1",
       "Microsoft.Extensions.SecretManager.Tools >= 2.0.0",
@@ -13239,6 +13277,10 @@
     "frameworks": {
       "netcoreapp2.0": {
         "dependencies": {
+          "CommonMark.NET": {
+            "target": "Package",
+            "version": "[0.15.1, )"
+          },
           "Microsoft.AspNetCore.All": {
             "target": "Package",
             "version": "[2.0.3, )"
