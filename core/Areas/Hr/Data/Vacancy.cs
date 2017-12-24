@@ -1,5 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Tochka.Areas.Geodata.Data;
 
 namespace Tochka.Areas.Hr.Data
 {
@@ -22,7 +24,12 @@ namespace Tochka.Areas.Hr.Data
         [Column(TypeName = "text")]
         public string Text { get; set; }
 
-        public Vacancy() {}
+        public List<VacancyCity> VacanciesCities { get; set; }
+
+        public Vacancy()
+        {
+            VacanciesCities = new List<VacancyCity>();
+        }
 
         public Vacancy(string name, string href, string annotation, string text)
             :this(0, name, href, annotation, text) {}

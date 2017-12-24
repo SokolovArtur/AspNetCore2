@@ -7,8 +7,8 @@ using System;
 namespace Tochka.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20171223143000_CreateVacancySchema")]
-    partial class CreateVacancySchema
+    [Migration("20171224140000_CreateVacancyCitySchema")]
+    partial class CreateVacancyCitySchema
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -123,6 +123,29 @@ namespace Tochka.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("Tochka.Areas.Geodata.Data.City", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("IsRepresentation");
+
+                    b.Property<string>("LatinName")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LatinName")
+                        .IsUnique();
+
+                    b.ToTable("Cities");
+                });
+
             modelBuilder.Entity("Tochka.Areas.Hr.Data.Vacancy", b =>
                 {
                     b.Property<int>("Id")
@@ -148,6 +171,35 @@ namespace Tochka.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("Vacancies");
+                });
+
+            modelBuilder.Entity("Tochka.Areas.Hr.Data.VacancyCity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ActiveFrom")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("timestamp");
+
+                    b.Property<string>("ActiveTo")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("timestamp");
+
+                    b.Property<int>("CityId");
+
+                    b.Property<int>("VacancyId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CityId");
+
+                    b.HasIndex("VacancyId");
+
+                    b.ToTable("VacanciesCities");
                 });
 
             modelBuilder.Entity("Tochka.Models.ApplicationUser", b =>
@@ -242,6 +294,19 @@ namespace Tochka.Data.Migrations
                     b.HasOne("Tochka.Models.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Tochka.Areas.Hr.Data.VacancyCity", b =>
+                {
+                    b.HasOne("Tochka.Areas.Geodata.Data.City", "City")
+                        .WithMany("VacanciesCities")
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Tochka.Areas.Hr.Data.Vacancy", "Vacancy")
+                        .WithMany("VacanciesCities")
+                        .HasForeignKey("VacancyId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
         }

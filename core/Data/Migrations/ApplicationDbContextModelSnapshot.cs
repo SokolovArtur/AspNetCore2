@@ -171,6 +171,35 @@ namespace Tochka.Data.Migrations
                     b.ToTable("Vacancies");
                 });
 
+            modelBuilder.Entity("Tochka.Areas.Hr.Data.VacancyCity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ActiveFrom")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("timestamp");
+
+                    b.Property<string>("ActiveTo")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("timestamp");
+
+                    b.Property<int>("CityId");
+
+                    b.Property<int>("VacancyId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CityId");
+
+                    b.HasIndex("VacancyId");
+
+                    b.ToTable("VacanciesCities");
+                });
+
             modelBuilder.Entity("Tochka.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -263,6 +292,19 @@ namespace Tochka.Data.Migrations
                     b.HasOne("Tochka.Models.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Tochka.Areas.Hr.Data.VacancyCity", b =>
+                {
+                    b.HasOne("Tochka.Areas.Geodata.Data.City", "City")
+                        .WithMany("VacanciesCities")
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Tochka.Areas.Hr.Data.Vacancy", "Vacancy")
+                        .WithMany("VacanciesCities")
+                        .HasForeignKey("VacancyId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
         }
