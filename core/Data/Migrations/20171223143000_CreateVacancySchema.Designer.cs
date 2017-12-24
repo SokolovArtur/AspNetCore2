@@ -2,12 +2,15 @@
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.EntityFrameworkCore.Storage.Internal;
 using System;
+using Tochka.Data;
 
 namespace Tochka.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20171220100000_CreateVacancySchema")]
+    [Migration("220171223143000_CreateVacancySchema")]
     partial class CreateVacancySchema
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -123,7 +126,7 @@ namespace Tochka.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Tochka.Areas.HR.Data.Vacancy", b =>
+            modelBuilder.Entity("Tochka.Areas.Hr.Data.Vacancy", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -135,10 +138,17 @@ namespace Tochka.Data.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(255)");
 
+                    b.Property<string>("Ref")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
                     b.Property<string>("Text")
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Ref")
+                        .IsUnique();
 
                     b.ToTable("Vacancies");
                 });

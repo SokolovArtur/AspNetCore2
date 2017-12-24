@@ -7,6 +7,7 @@
 --file=/var/www/core/Areas/Hr/Views/Vacancies/Details.cshtml
 --file=/var/www/core/Areas/Hr/Views/Vacancies/Edit.cshtml
 --file=/var/www/core/Areas/Hr/Views/Vacancies/Index.cshtml
+--file=/var/www/core/Areas/Hr/Views/Vacancies/_RecordPartial.cshtml
 --file=/var/www/core/Areas/Hr/Views/_ViewImports.cshtml
 --file=/var/www/core/Areas/Hr/Views/_ViewStart.cshtml
 --file=/var/www/core/Views/Home/About.cshtml

@@ -1,0 +1,18 @@
+﻿@model Tochka.Areas.Hr.Models.VacancyRecordViewModel
+
+<div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+<div class="md-form">
+    <label asp-for="Name"></label>
+    <input asp-for="Name" class="form-control" />
+    <span asp-validation-for="Name" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label asp-for="Annotation"></label>
+    <textarea type="text" asp-for="Annotation" class="form-control" rows="5"></textarea>
+    <span asp-validation-for="Annotation" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label asp-for="Text"></label>
+    <textarea type="text" asp-for="Text" class="form-control" rows="5"></textarea>
+    <span asp-validation-for="Text" class="text-danger"></span>
+</div>

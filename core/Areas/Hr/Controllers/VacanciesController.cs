@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Tochka.Areas.Hr.Data;
+using Tochka.Areas.Hr.Models;
 using Tochka.Data;
 
 namespace Tochka.Areas.Hr.Controllers
@@ -14,10 +12,12 @@ namespace Tochka.Areas.Hr.Controllers
     public class VacanciesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IVacancyRepository _repository;
 
-        public VacanciesController(ApplicationDbContext context)
+        public VacanciesController(ApplicationDbContext context, IVacancyRepository repository)
         {
             _context = context;
+            _repository = repository;
         }
 
         // GET: Hr/Vacancies
@@ -47,21 +47,33 @@ namespace Tochka.Areas.Hr.Controllers
         // GET: Hr/Vacancies/Create
         public IActionResult Create()
         {
-            return View();
+            return View(new VacancyRecordViewModel());
         }
 
         // POST: Hr/Vacancies/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Annotation,Text")] Vacancy vacancy)
+        public async Task<IActionResult> Create([Bind("Name,Annotation,Text")] VacancyRecordViewModel vm)
         {
+            Vacancy vacancy = new Vacancy(
+                vm.Name,
+                vm.Ref,
+                vm.Annotation,
+                vm.Text
+            );
+
+            if (await _repository.HasDuplicate(vacancy))
+            {
+                ModelState.AddModelError("Name", "Duplicate value");
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Add(vacancy);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(vacancy);
+            return View(vm);
         }
 
         // GET: Hr/Vacancies/Edit/0
@@ -77,17 +89,36 @@ namespace Tochka.Areas.Hr.Controllers
             {
                 return NotFound();
             }
-            return View(vacancy);
+
+            return View(new VacancyRecordViewModel(
+                vacancy.Id,
+                vacancy.Name,
+                vacancy.Annotation,
+                vacancy.Text
+            ));
         }
 
         // POST: Hr/Vacancies/Edit/0
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Annotation,Text")] Vacancy vacancy)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Annotation,Text")] VacancyRecordViewModel vm)
         {
-            if (id != vacancy.Id)
+            if (id != vm.Id)
             {
                 return NotFound();
+            }
+
+            Vacancy vacancy = new Vacancy(
+                vm.Id,
+                vm.Name,
+                vm.Ref,
+                vm.Annotation,
+                vm.Text
+            );
+
+            if (await _repository.HasDuplicate(vacancy))
+            {
+                ModelState.AddModelError("Name", "Duplicate value");
             }
 
             if (ModelState.IsValid)
@@ -110,7 +141,7 @@ namespace Tochka.Areas.Hr.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(vacancy);
+            return View(vm);
         }
 
         // GET: Hr/Vacancies/Delete/0
