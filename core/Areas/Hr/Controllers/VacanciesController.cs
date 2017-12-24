@@ -47,13 +47,13 @@ namespace Tochka.Areas.Hr.Controllers
         // GET: Hr/Vacancies/Create
         public IActionResult Create()
         {
-            return View(new VacancyRecordViewModel());
+            return View(new VacancyRecordViewModel(_repository.CitiesList));
         }
 
         // POST: Hr/Vacancies/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Annotation,Text")] VacancyRecordViewModel vm)
+        public async Task<IActionResult> Create([Bind("Name,City,Annotation,Text")] VacancyRecordViewModel vm)
         {
             Vacancy vacancy = new Vacancy(
                 vm.Name,
@@ -62,7 +62,7 @@ namespace Tochka.Areas.Hr.Controllers
                 vm.Text
             );
 
-            if (await _repository.HasDuplicate(vacancy))
+            if (_repository.HasDuplicate(vacancy))
             {
                 ModelState.AddModelError("Name", "Duplicate value");
             }
@@ -93,6 +93,8 @@ namespace Tochka.Areas.Hr.Controllers
             return View(new VacancyRecordViewModel(
                 vacancy.Id,
                 vacancy.Name,
+                _repository.CitiesList,
+                1, // TODO
                 vacancy.Annotation,
                 vacancy.Text
             ));
@@ -101,7 +103,7 @@ namespace Tochka.Areas.Hr.Controllers
         // POST: Hr/Vacancies/Edit/0
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Annotation,Text")] VacancyRecordViewModel vm)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,City,Annotation,Text")] VacancyRecordViewModel vm)
         {
             if (id != vm.Id)
             {
@@ -116,7 +118,7 @@ namespace Tochka.Areas.Hr.Controllers
                 vm.Text
             );
 
-            if (await _repository.HasDuplicate(vacancy))
+            if (_repository.HasDuplicate(vacancy))
             {
                 ModelState.AddModelError("Name", "Duplicate value");
             }

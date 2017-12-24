@@ -23,12 +23,21 @@ namespace Tochka.Data
             builder.Entity<City>()
                 .HasIndex(city => city.LatinName)
                 .IsUnique();
-            builder.Entity<Vacancy>()
-                .HasIndex(vacancy => vacancy.Ref)
+            builder.Entity<VacancyCity>()
+                .HasIndex(vc => new { vc.VacancyId, vc.CityId })
                 .IsUnique();
+            builder.Entity<VacancyCity>()
+                .HasOne(one => one.Vacancy)
+                .WithMany(many => many.VacanciesCities)
+                .HasForeignKey(vc => vc.VacancyId);
+            builder.Entity<VacancyCity>()
+                .HasOne(one => one.City)
+                .WithMany(many => many.VacanciesCities)
+                .HasForeignKey(vc => vc.CityId);
         }
 
         public DbSet<City> Cities { get; set; }
         public DbSet<Vacancy> Vacancies { get; set; }
+        public DbSet<VacancyCity> VacanciesCities { get; set; }
     }
 }

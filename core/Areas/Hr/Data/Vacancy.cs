@@ -1,12 +1,28 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Tochka.Areas.Geodata.Data;
 
 namespace Tochka.Areas.Hr.Data
 {
     public class Vacancy
     {
+        public Vacancy()
+        {
+            VacanciesCities = new List<VacancyCity>();
+        }
+
+        public Vacancy(string name, string href, string annotation, string text)
+            : this(0, name, href, annotation, text) { }
+
+        public Vacancy(int id, string name, string href, string annotation, string text)
+        {
+            Id = id;
+            Name = name;
+            Ref = href;
+            Annotation = annotation;
+            Text = text;
+        }
+
         [Key]
         public int Id { get; set; }
 
@@ -25,22 +41,5 @@ namespace Tochka.Areas.Hr.Data
         public string Text { get; set; }
 
         public List<VacancyCity> VacanciesCities { get; set; }
-
-        public Vacancy()
-        {
-            VacanciesCities = new List<VacancyCity>();
-        }
-
-        public Vacancy(string name, string href, string annotation, string text)
-            :this(0, name, href, annotation, text) {}
-
-        public Vacancy(int id, string name, string href, string annotation, string text)
-        {
-            Id = id;
-            Name = name;
-            Ref = href;
-            Annotation = annotation;
-            Text = text;
-        }
     }
 }
