@@ -173,17 +173,6 @@ namespace Tochka.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("ActiveFrom")
-                        .IsConcurrencyToken()
-                        .IsRequired()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("timestamp");
-
-                    b.Property<string>("ActiveTo")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("timestamp");
-
                     b.Property<int>("CityId");
 
                     b.Property<int>("VacancyId");

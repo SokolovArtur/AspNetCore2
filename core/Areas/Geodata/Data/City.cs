@@ -8,11 +8,6 @@ namespace Tochka.Areas.Geodata.Data
 {
     public class City
     {
-        public City()
-        {
-            VacanciesCities = new List<VacancyCity>();
-        }
-
         [Key]
         public int Id { get; set; }
 
@@ -28,5 +23,10 @@ namespace Tochka.Areas.Geodata.Data
         public bool IsRepresentation { get; set; }
 
         public ICollection<VacancyCity> VacanciesCities { get; set; }
+
+        public City()
+        {
+            VacanciesCities = new List<VacancyCity>();
+        }
     }
 }

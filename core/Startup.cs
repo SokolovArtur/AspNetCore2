@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Tochka.Areas.Geodata.Data;
 using Tochka.Areas.Hr.Data;
 using Tochka.Data;
 using Tochka.Models;
@@ -31,6 +32,7 @@ namespace Tochka
 
             services.AddMvc();
 
+            services.AddTransient<ICityRepository, EFCityRepository>();
             services.AddTransient<IVacancyRepository, EFVacancyRepository>();
         }
 

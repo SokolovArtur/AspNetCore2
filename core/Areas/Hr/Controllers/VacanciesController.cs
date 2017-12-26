@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Tochka.Areas.Geodata.Data;
 using Tochka.Areas.Hr.Data;
 using Tochka.Areas.Hr.Models;
 using Tochka.Data;
@@ -12,12 +14,17 @@ namespace Tochka.Areas.Hr.Controllers
     public class VacanciesController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly IVacancyRepository _repository;
+        private readonly ICityRepository _city;
+        private readonly IVacancyRepository _vacancy;
 
-        public VacanciesController(ApplicationDbContext context, IVacancyRepository repository)
+        public VacanciesController(
+            ApplicationDbContext context,
+            ICityRepository city,
+            IVacancyRepository vacancy)
         {
             _context = context;
-            _repository = repository;
+            _city = city;
+            _vacancy = vacancy;
         }
 
         // GET: Hr/Vacancies
@@ -45,35 +52,53 @@ namespace Tochka.Areas.Hr.Controllers
         }
 
         // GET: Hr/Vacancies/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View(new VacancyRecordViewModel(_repository.CitiesList));
+            return View(new VacancyRecordViewModel
+            {
+                CitiesForSelection = _city.CitiesInSelectList(await _city.RepresentationCities())
+            });
         }
 
         // POST: Hr/Vacancies/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,City,Annotation,Text")] VacancyRecordViewModel vm)
+        public async Task<IActionResult> Create([Bind("Name,ListCitiesIds,Annotation,Text")] VacancyRecordViewModel vm)
         {
-            Vacancy vacancy = new Vacancy(
-                vm.Name,
-                vm.Ref,
-                vm.Annotation,
-                vm.Text
-            );
+            vm.CitiesForSelection = _city.CitiesInSelectList(await _city.RepresentationCities());
 
-            if (_repository.HasDuplicate(vacancy))
+            if (!ModelState.IsValid)
             {
-                ModelState.AddModelError("Name", "Duplicate value");
+                return View(vm);
             }
 
-            if (ModelState.IsValid)
+            Vacancy vacancy = new Vacancy
             {
-                _context.Add(vacancy);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                Name = vm.Name,
+                Ref = vm.Ref,
+                Annotation = vm.Annotation,
+                Text = vm.Text,
+            };
+            var citiesIds = new List<int>();
+            citiesIds.AddRange(vm.ListCitiesIds);
+
+            IEnumerable<Vacancy> duplicates = await _vacancy.Duplicates(vacancy, citiesIds);
+            if (duplicates.Count() > 0)
+            {
+                ModelState.AddModelError("", "Duplicate value.");
+                return View(vm);
             }
-            return View(vm);
+
+            try
+            {
+                await _vacancy.SaveAsync(vacancy, citiesIds);
+            }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "Error saving.");
+                return View(vm);
+            }
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Hr/Vacancies/Edit/0
@@ -90,37 +115,41 @@ namespace Tochka.Areas.Hr.Controllers
                 return NotFound();
             }
 
-            return View(new VacancyRecordViewModel(
-                vacancy.Id,
-                vacancy.Name,
-                _repository.CitiesList,
-                1, // TODO
-                vacancy.Annotation,
-                vacancy.Text
-            ));
+            return View(new VacancyRecordViewModel
+            {
+                Id = vacancy.Id,
+                Name = vacancy.Name,
+                Annotation = vacancy.Annotation,
+                Text = vacancy.Text
+            });
         }
 
         // POST: Hr/Vacancies/Edit/0
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,City,Annotation,Text")] VacancyRecordViewModel vm)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,ListCitiesIds,Annotation,Text")] VacancyRecordViewModel vm)
         {
             if (id != vm.Id)
             {
                 return NotFound();
             }
 
-            Vacancy vacancy = new Vacancy(
-                vm.Id,
-                vm.Name,
-                vm.Ref,
-                vm.Annotation,
-                vm.Text
-            );
-
-            if (_repository.HasDuplicate(vacancy))
+            Vacancy vacancy = new Vacancy
             {
-                ModelState.AddModelError("Name", "Duplicate value");
+                Id = vm.Id,
+                Name = vm.Name,
+                Ref = vm.Ref,
+                Annotation = vm.Annotation,
+                Text = vm.Text
+            };
+
+            List<int> citiesIds = new List<int>();
+            citiesIds.AddRange(vm.ListCitiesIds);
+
+            IEnumerable<Vacancy> duplicates = await _vacancy.Duplicates(vacancy, citiesIds);
+            if (duplicates.Count() > 0)
+            {
+                ModelState.AddModelError("", "Duplicate value.");
             }
 
             if (ModelState.IsValid)

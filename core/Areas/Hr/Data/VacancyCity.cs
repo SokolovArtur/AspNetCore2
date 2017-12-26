@@ -16,15 +16,6 @@ namespace Tochka.Areas.Hr.Data
         [Required]
         public int CityId { get; set; }
 
-        [Column(TypeName = "timestamp")]
-        [Timestamp]
-        [Required]
-        public string ActiveFrom { get; set; }
-
-        [Column(TypeName = "timestamp")]
-        [Timestamp]
-        public string ActiveTo { get; set; }
-
         public Vacancy Vacancy { get; set; }
 
         public City City { get; set; }

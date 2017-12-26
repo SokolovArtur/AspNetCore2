@@ -13,8 +13,6 @@ namespace Tochka.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    ActiveFrom = table.Column<string>(type: "timestamp", defaultValueSql: "now()", nullable: false),
-                    ActiveTo = table.Column<string>(type: "timestamp", nullable: true),
                     CityId = table.Column<int>(nullable: false),
                     VacancyId = table.Column<int>(nullable: false)
                 },
