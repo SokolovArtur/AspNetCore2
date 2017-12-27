@@ -15,7 +15,7 @@ namespace Tochka.Areas.Hr.Data
 
         [Column(TypeName = "varchar(255)")]
         [Required]
-        public string Ref { get; set; }
+        public string LatinName { get; set; }
 
         [Column(TypeName = "text")]
         public string Annotation { get; set; }

@@ -16,18 +16,18 @@ namespace Tochka.Areas.Geodata.Data
             _context = context;
         }
 
-        public IEnumerable<City> Cities => _context.Cities;
+        public IQueryable<City> Cities => _context.Cities.AsNoTracking();
 
-        public IEnumerable<SelectListItem> CitiesInSelectList(IEnumerable<City> cities)
+        public IEnumerable<SelectListItem> SelectListCities(IEnumerable<City> cities)
         {
             return cities
                 .Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Name })
                 .ToList();
         }
 
-        public async Task<IEnumerable<City>> RepresentationCities()
+        public async Task<IEnumerable<City>> RepresentationCitiesAsync()
         {
-            IEnumerable<City> cities = await _context.Cities
+            IEnumerable<City> cities = await Cities
                 .Where(c => c.IsRepresentation == true)
                 .ToListAsync();
             return cities;

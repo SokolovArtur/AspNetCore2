@@ -135,7 +135,7 @@ namespace Tochka.Data.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(255)");
 
-                    b.Property<string>("Ref")
+                    b.Property<string>("LatinName")
                         .IsRequired()
                         .HasColumnType("varchar(255)");
 
@@ -144,7 +144,7 @@ namespace Tochka.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Ref")
+                    b.HasIndex("LatinName")
                         .IsUnique();
 
                     b.ToTable("Vacancies");

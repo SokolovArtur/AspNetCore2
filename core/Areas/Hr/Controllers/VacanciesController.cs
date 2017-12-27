@@ -6,23 +6,17 @@ using Microsoft.EntityFrameworkCore;
 using Tochka.Areas.Geodata.Data;
 using Tochka.Areas.Hr.Data;
 using Tochka.Areas.Hr.Models;
-using Tochka.Data;
 
 namespace Tochka.Areas.Hr.Controllers
 {
     [Area("Hr")]
     public class VacanciesController : Controller
     {
-        private readonly ApplicationDbContext _context;
         private readonly ICityRepository _city;
         private readonly IVacancyRepository _vacancy;
 
-        public VacanciesController(
-            ApplicationDbContext context,
-            ICityRepository city,
-            IVacancyRepository vacancy)
+        public VacanciesController(ICityRepository city, IVacancyRepository vacancy)
         {
-            _context = context;
             _city = city;
             _vacancy = vacancy;
         }
@@ -30,7 +24,7 @@ namespace Tochka.Areas.Hr.Controllers
         // GET: Hr/Vacancies
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Vacancies.ToListAsync());
+            return View(await _vacancy.Vacancies.ToListAsync());
         }
 
         // GET: Hr/Vacancies/Details/0
@@ -41,8 +35,7 @@ namespace Tochka.Areas.Hr.Controllers
                 return NotFound();
             }
 
-            var vacancy = await _context.Vacancies
-                .SingleOrDefaultAsync(m => m.Id == id);
+            var vacancy = await _vacancy.FindByIdAsync((int)id);
             if (vacancy == null)
             {
                 return NotFound();
@@ -56,7 +49,7 @@ namespace Tochka.Areas.Hr.Controllers
         {
             return View(new VacancyRecordViewModel
             {
-                CitiesForSelection = _city.CitiesInSelectList(await _city.RepresentationCities())
+                CitiesForSelection = _city.SelectListCities(await _city.RepresentationCitiesAsync())
             });
         }
 
@@ -65,7 +58,7 @@ namespace Tochka.Areas.Hr.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Name,ListCitiesIds,Annotation,Text")] VacancyRecordViewModel vm)
         {
-            vm.CitiesForSelection = _city.CitiesInSelectList(await _city.RepresentationCities());
+            vm.CitiesForSelection = _city.SelectListCities(await _city.RepresentationCitiesAsync());
 
             if (!ModelState.IsValid)
             {
@@ -75,14 +68,14 @@ namespace Tochka.Areas.Hr.Controllers
             Vacancy vacancy = new Vacancy
             {
                 Name = vm.Name,
-                Ref = vm.Ref,
+                LatinName = vm.LatinName,
                 Annotation = vm.Annotation,
                 Text = vm.Text,
             };
             var citiesIds = new List<int>();
             citiesIds.AddRange(vm.ListCitiesIds);
 
-            IEnumerable<Vacancy> duplicates = await _vacancy.Duplicates(vacancy, citiesIds);
+            IEnumerable<Vacancy> duplicates = await _vacancy.DuplicatesAsync(vacancy, citiesIds);
             if (duplicates.Count() > 0)
             {
                 ModelState.AddModelError("", "Duplicate value.");
@@ -109,7 +102,7 @@ namespace Tochka.Areas.Hr.Controllers
                 return NotFound();
             }
 
-            var vacancy = await _context.Vacancies.SingleOrDefaultAsync(m => m.Id == id);
+            var vacancy = await _vacancy.FindByIdAsync((int)id);
             if (vacancy == null)
             {
                 return NotFound();
@@ -120,7 +113,9 @@ namespace Tochka.Areas.Hr.Controllers
                 Id = vacancy.Id,
                 Name = vacancy.Name,
                 Annotation = vacancy.Annotation,
-                Text = vacancy.Text
+                Text = vacancy.Text,
+                CitiesForSelection = _city.SelectListCities(await _city.RepresentationCitiesAsync()),
+                ListCitiesIds = await _vacancy.CitiesIdsInVacancyAsync(vacancy.Id)
             });
         }
 
@@ -129,50 +124,46 @@ namespace Tochka.Areas.Hr.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,ListCitiesIds,Annotation,Text")] VacancyRecordViewModel vm)
         {
-            if (id != vm.Id)
+            if (id != vm.Id || (await _vacancy.FindByIdAsync((int)id) == null))
             {
                 return NotFound();
+            }
+
+            vm.CitiesForSelection = _city.SelectListCities(await _city.RepresentationCitiesAsync());
+
+            if (!ModelState.IsValid)
+            {
+                return View(vm);
             }
 
             Vacancy vacancy = new Vacancy
             {
                 Id = vm.Id,
                 Name = vm.Name,
-                Ref = vm.Ref,
+                LatinName = vm.LatinName,
                 Annotation = vm.Annotation,
-                Text = vm.Text
+                Text = vm.Text,
             };
-
-            List<int> citiesIds = new List<int>();
+            var citiesIds = new List<int>();
             citiesIds.AddRange(vm.ListCitiesIds);
 
-            IEnumerable<Vacancy> duplicates = await _vacancy.Duplicates(vacancy, citiesIds);
+            IEnumerable<Vacancy> duplicates = await _vacancy.DuplicatesAsync(vacancy, citiesIds);
             if (duplicates.Count() > 0)
             {
                 ModelState.AddModelError("", "Duplicate value.");
+                return View(vm);
             }
 
-            if (ModelState.IsValid)
+            try
             {
-                try
-                {
-                    _context.Update(vacancy);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!VacancyExists(vacancy.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                await _vacancy.SaveAsync(vacancy, citiesIds);
             }
-            return View(vm);
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "Error saving.");
+                return View(vm);
+            }
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Hr/Vacancies/Delete/0
@@ -183,8 +174,7 @@ namespace Tochka.Areas.Hr.Controllers
                 return NotFound();
             }
 
-            var vacancy = await _context.Vacancies
-                .SingleOrDefaultAsync(m => m.Id == id);
+            Vacancy vacancy = await _vacancy.FindByIdAsync((int)id);
             if (vacancy == null)
             {
                 return NotFound();
@@ -198,15 +188,14 @@ namespace Tochka.Areas.Hr.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var vacancy = await _context.Vacancies.SingleOrDefaultAsync(m => m.Id == id);
-            _context.Vacancies.Remove(vacancy);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+            var vacancy = await _vacancy.FindByIdAsync((int)id);
+            if (vacancy == null)
+            {
+                NotFound();
+            }
 
-        private bool VacancyExists(int id)
-        {
-            return _context.Vacancies.Any(e => e.Id == id);
+            await _vacancy.DeleteAsync(vacancy);
+            return RedirectToAction(nameof(Index));
         }
     }
 }

@@ -7,7 +7,7 @@ namespace Tochka.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropIndex(
-                name: "IX_Vacancies_Ref",
+                name: "IX_Vacancies_LatinName",
                 table: "Vacancies");
 
             migrationBuilder.CreateIndex(
@@ -24,9 +24,9 @@ namespace Tochka.Data.Migrations
                 table: "VacanciesCities");
             
             migrationBuilder.CreateIndex(
-                name: "IX_Vacancies_Ref",
+                name: "IX_Vacancies_LatinName",
                 table: "Vacancies",
-                column: "Ref",
+                column: "LatinName",
                 unique: true);
         }
     }

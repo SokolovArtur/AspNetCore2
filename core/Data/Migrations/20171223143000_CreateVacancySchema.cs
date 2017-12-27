@@ -15,7 +15,7 @@ namespace Tochka.Data.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     Annotation = table.Column<string>(type: "text", nullable: true),
                     Name = table.Column<string>(type: "varchar(255)", nullable: false),
-                    Ref = table.Column<string>(type: "varchar(255)", nullable: false),
+                    LatinName = table.Column<string>(type: "varchar(255)", nullable: false),
                     Text = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
@@ -24,9 +24,9 @@ namespace Tochka.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Vacancies_Ref",
+                name: "IX_Vacancies_LatinName",
                 table: "Vacancies",
-                column: "Ref",
+                column: "LatinName",
                 unique: true);
         }
 

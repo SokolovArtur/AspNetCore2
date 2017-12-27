@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -6,10 +7,10 @@ namespace Tochka.Areas.Geodata.Data
 {
     public interface ICityRepository
     {
-        IEnumerable<City> Cities { get; }
+        IQueryable<City> Cities { get; }
 
-        IEnumerable<SelectListItem> CitiesInSelectList(IEnumerable<City> cities);
+        IEnumerable<SelectListItem> SelectListCities(IEnumerable<City> cities);
 
-        Task<IEnumerable<City>> RepresentationCities();
+        Task<IEnumerable<City>> RepresentationCitiesAsync();
     }
 }

@@ -15,7 +15,7 @@ namespace Tochka.Areas.Hr.Models
         public string Name { get; set; }
 
         [StringLength(255)]
-        public string Ref
+        public string LatinName
         {
             get
             {

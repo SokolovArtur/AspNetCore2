@@ -16,16 +16,52 @@ namespace Tochka.Areas.Hr.Data
             _context = context;
         }
 
-        public IEnumerable<Vacancy> Vacancies => _context.Vacancies;
+        public IQueryable<Vacancy> Vacancies => _context.Vacancies.AsNoTracking();
 
-        public async Task<IEnumerable<Vacancy>> Duplicates(Vacancy vacancy, int cityId)
+        private IQueryable<VacancyCity> VacanciesCities => _context.VacanciesCities.AsNoTracking();
+
+        public async Task<IEnumerable<int>> CitiesIdsInVacancyAsync(int vacancyId)
         {
-            return await Duplicates(vacancy, new List<int> { cityId });
+            return await VacanciesCities.Where(vc => vc.VacancyId == vacancyId).Select(vc => vc.CityId).ToListAsync();
         }
 
-        public async Task<IEnumerable<Vacancy>> Duplicates(Vacancy vacancy, List<int> citiesIds)
+        public async Task DeleteAsync(int vacancyId)
         {
-            IEnumerable<Vacancy> duplicates = await _context.VacanciesCities
+            var vacancy = await FindByIdAsync(vacancyId);
+            if (vacancy != null)
+            {
+                await DeleteAsync(vacancy);
+            }
+        }
+
+        public async Task DeleteAsync(Vacancy vacancy)
+        {
+            using (var transaction = _context.Database.BeginTransaction())
+            {
+                try
+                {
+                    await DeleteVacancyCityRangeAsync(new List<Vacancy> { vacancy });
+                    _context.Remove(vacancy);
+                    await _context.SaveChangesAsync();
+
+                    transaction.Commit();
+                }
+                catch (DbUpdateException)
+                {
+                    transaction.Rollback();
+                    throw;
+                }
+            }
+        }
+
+        public async Task<IEnumerable<Vacancy>> DuplicatesAsync(Vacancy vacancy, int cityId)
+        {
+            return await DuplicatesAsync(vacancy, new List<int> { cityId });
+        }
+
+        public async Task<IEnumerable<Vacancy>> DuplicatesAsync(Vacancy vacancy, List<int> citiesIds)
+        {
+            IEnumerable<Vacancy> duplicates = await VacanciesCities
                 .Where(vc =>
                     citiesIds.Contains(vc.CityId)
                     && vc.Vacancy.Name == vacancy.Name
@@ -34,12 +70,18 @@ namespace Tochka.Areas.Hr.Data
                 {
                     Id = vc.Vacancy.Id,
                     Name = vc.Vacancy.Name,
-                    Ref = vc.Vacancy.Ref,
+                    LatinName = vc.Vacancy.LatinName,
                     Annotation = vc.Vacancy.Annotation,
                     Text = vc.Vacancy.Text
                 })
                 .ToListAsync();
             return duplicates;
+        }
+
+        public async Task<Vacancy> FindByIdAsync(int vacancyId)
+        {
+            var vacancy = await Vacancies.SingleOrDefaultAsync(m => m.Id == vacancyId);
+            return vacancy;
         }
 
         public async Task SaveAsync(Vacancy vacancy, List<int> citiesIds)
@@ -49,7 +91,14 @@ namespace Tochka.Areas.Hr.Data
                 int savedVacancies = 0;
                 try
                 {
-                    EntityEntry ee = (vacancy.Id > 0) ? _context.Update(vacancy) : _context.Add(vacancy);
+                    if (vacancy.Id > 0)
+                    {
+                        _context.Update(vacancy);
+                    }
+                    else
+                    {
+                        _context.Add(vacancy);
+                    }
                     savedVacancies = await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateException)
@@ -86,11 +135,22 @@ namespace Tochka.Areas.Hr.Data
 
         private async Task DeleteVacancyCityRangeAsync(IEnumerable<VacancyCity> vacanciesCities)
         {
-            foreach (var vacancyCity in vacanciesCities)
+            IEnumerable<int> vacanciesIds = vacanciesCities.GroupBy(vc => vc.VacancyId).Select(vc => vc.Key);
+            await DeleteVacancyCityRangeAsync(vacanciesIds);
+        }
+
+        private async Task DeleteVacancyCityRangeAsync(IEnumerable<Vacancy> vacancies)
+        {
+            List<int> vacanciesIds = new List<int>();
+            vacanciesIds.AddRange(vacancies.Select(v => v.Id));
+            await DeleteVacancyCityRangeAsync(vacanciesIds);
+        }
+
+        private async Task DeleteVacancyCityRangeAsync(IEnumerable<int> vacanciesIds)
+        {
+            foreach (var vacancyId in vacanciesIds)
             {
-                _context.RemoveRange(_context.VacanciesCities.Where(
-                    vm => (vm.VacancyId == vacancyCity.VacancyId && vm.CityId == vacancyCity.CityId)
-                ));
+                _context.RemoveRange(VacanciesCities.Where(vm => vm.VacancyId == vacancyId));
             }
             await _context.SaveChangesAsync();
         }
