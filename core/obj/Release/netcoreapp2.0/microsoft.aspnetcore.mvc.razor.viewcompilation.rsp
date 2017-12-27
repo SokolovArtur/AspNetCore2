@@ -3,8 +3,6 @@
 --application-name=Tochka
 --content-root=/var/www/core
 --file=/var/www/core/Areas/Hr/Views/Vacancies/Create.cshtml
---file=/var/www/core/Areas/Hr/Views/Vacancies/Delete.cshtml
---file=/var/www/core/Areas/Hr/Views/Vacancies/Details.cshtml
 --file=/var/www/core/Areas/Hr/Views/Vacancies/Edit.cshtml
 --file=/var/www/core/Areas/Hr/Views/Vacancies/Index.cshtml
 --file=/var/www/core/Areas/Hr/Views/Vacancies/_RecordPartial.cshtml
@@ -14,6 +12,8 @@
 --file=/var/www/core/Views/Home/Contact.cshtml
 --file=/var/www/core/Views/Home/Index.cshtml
 --file=/var/www/core/Views/Shared/Error.cshtml
+--file=/var/www/core/Views/Shared/_DataTableScriptsPartial.cshtml
+--file=/var/www/core/Views/Shared/_DataTableStyleSheetPartial.cshtml
 --file=/var/www/core/Views/Shared/_Layout.cshtml
 --file=/var/www/core/Views/Shared/_MarkdownEditorScriptsPartial.cshtml
 --file=/var/www/core/Views/Shared/_MarkdownEditorStyleSheetPartial.cshtml

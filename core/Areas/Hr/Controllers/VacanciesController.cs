@@ -24,7 +24,20 @@ namespace Tochka.Areas.Hr.Controllers
         // GET: Hr/Vacancies
         public async Task<IActionResult> Index()
         {
-            return View(await _vacancy.Vacancies.ToListAsync());
+            IEnumerable<Vacancy> vacancies = await _vacancy.Vacancies.ToListAsync();
+            var vm = new List<VacancyItemViewModel>();
+            foreach (Vacancy vacancy in vacancies)
+            {
+                vm.Add(new VacancyItemViewModel
+                {
+                    Id = vacancy.Id,
+                    Name = vacancy.Name,
+                    Annotation = vacancy.Annotation,
+                    Text = vacancy.Text,
+                    NamesOfCities = await _vacancy.NamesOfCitiesInVacancyAsync(vacancy.Id)
+                });
+            }
+            return View(vm);
         }
 
         // GET: Hr/Vacancies/Details/0
@@ -41,7 +54,14 @@ namespace Tochka.Areas.Hr.Controllers
                 return NotFound();
             }
 
-            return View(vacancy);
+            return View(new VacancyItemViewModel
+            {
+                Id = vacancy.Id,
+                Name = vacancy.Name,
+                Annotation = vacancy.Annotation,
+                Text = vacancy.Text,
+                NamesOfCities = await _vacancy.NamesOfCitiesInVacancyAsync(vacancy.Id)
+            });
         }
 
         // GET: Hr/Vacancies/Create
@@ -178,20 +198,6 @@ namespace Tochka.Areas.Hr.Controllers
             if (vacancy == null)
             {
                 return NotFound();
-            }
-
-            return View(vacancy);
-        }
-
-        // POST: Hr/Vacancies/Delete/0
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var vacancy = await _vacancy.FindByIdAsync((int)id);
-            if (vacancy == null)
-            {
-                NotFound();
             }
 
             await _vacancy.DeleteAsync(vacancy);

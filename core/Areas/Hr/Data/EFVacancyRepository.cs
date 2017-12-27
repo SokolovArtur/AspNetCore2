@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Tochka.Areas.Geodata.Data;
 using Tochka.Data;
 
 namespace Tochka.Areas.Hr.Data
@@ -10,10 +10,12 @@ namespace Tochka.Areas.Hr.Data
     public class EFVacancyRepository : IVacancyRepository
     {
         private readonly ApplicationDbContext _context;
+        private readonly ICityRepository _city;
 
-        public EFVacancyRepository(ApplicationDbContext context)
+        public EFVacancyRepository(ApplicationDbContext context, ICityRepository city)
         {
             _context = context;
+            _city = city;
         }
 
         public IQueryable<Vacancy> Vacancies => _context.Vacancies.AsNoTracking();
@@ -23,15 +25,6 @@ namespace Tochka.Areas.Hr.Data
         public async Task<IEnumerable<int>> CitiesIdsInVacancyAsync(int vacancyId)
         {
             return await VacanciesCities.Where(vc => vc.VacancyId == vacancyId).Select(vc => vc.CityId).ToListAsync();
-        }
-
-        public async Task DeleteAsync(int vacancyId)
-        {
-            var vacancy = await FindByIdAsync(vacancyId);
-            if (vacancy != null)
-            {
-                await DeleteAsync(vacancy);
-            }
         }
 
         public async Task DeleteAsync(Vacancy vacancy)
@@ -82,6 +75,15 @@ namespace Tochka.Areas.Hr.Data
         {
             var vacancy = await Vacancies.SingleOrDefaultAsync(m => m.Id == vacancyId);
             return vacancy;
+        }
+
+        public async Task<IEnumerable<string>> NamesOfCitiesInVacancyAsync(int vacancyId)
+        {
+            return await _city.Cities
+                .Join(VacanciesCities, c => c.Id, vc => vc.CityId, (c, vc) => new { vc.VacancyId, c.Name })
+                .Where(m => m.VacancyId == vacancyId)
+                .Select(m => m.Name)
+                .ToListAsync();
         }
 
         public async Task SaveAsync(Vacancy vacancy, List<int> citiesIds)
@@ -136,21 +138,18 @@ namespace Tochka.Areas.Hr.Data
         private async Task DeleteVacancyCityRangeAsync(IEnumerable<VacancyCity> vacanciesCities)
         {
             IEnumerable<int> vacanciesIds = vacanciesCities.GroupBy(vc => vc.VacancyId).Select(vc => vc.Key);
-            await DeleteVacancyCityRangeAsync(vacanciesIds);
+            foreach (var vacancyId in vacanciesIds)
+            {
+                _context.RemoveRange(VacanciesCities.Where(vm => vm.VacancyId == vacancyId));
+            }
+            await _context.SaveChangesAsync();
         }
 
         private async Task DeleteVacancyCityRangeAsync(IEnumerable<Vacancy> vacancies)
         {
-            List<int> vacanciesIds = new List<int>();
-            vacanciesIds.AddRange(vacancies.Select(v => v.Id));
-            await DeleteVacancyCityRangeAsync(vacanciesIds);
-        }
-
-        private async Task DeleteVacancyCityRangeAsync(IEnumerable<int> vacanciesIds)
-        {
-            foreach (var vacancyId in vacanciesIds)
+            foreach (var vacancy in vacancies)
             {
-                _context.RemoveRange(VacanciesCities.Where(vm => vm.VacancyId == vacancyId));
+                _context.RemoveRange(VacanciesCities.Where(vm => vm.VacancyId == vacancy.Id));
             }
             await _context.SaveChangesAsync();
         }

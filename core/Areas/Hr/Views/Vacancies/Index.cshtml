@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Tochka.Areas.Hr.Data.Vacancy>
+﻿@model IEnumerable<Tochka.Areas.Hr.Models.VacancyItemViewModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -10,7 +10,7 @@
     <a asp-area="Hr" asp-controller="Vacancies" asp-action="Create" class="btn btn-primary">Create New</a>
 </div>
 
-<table class="table">
+<table class="table table-bordered table-responsive table-datatable" cellspacing="0" width="100%">
     <thead>
         <tr>
             <th>
@@ -21,6 +21,9 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Text)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NamesOfCities)
             </th>
             <th></th>
         </tr>
@@ -38,11 +41,28 @@
                 <markdown value="@item.Text" />
             </td>
             <td>
-                <a asp-area="Hr" asp-controller="Vacancies" asp-action="Edit" asp-route-id="@item.Id" title="Edit"><i class="fa fa-pencil-square-o"></i></a>
-                <a asp-area="Hr" asp-controller="Vacancies" asp-action="Details" asp-route-id="@item.Id" title="Details"><i class="fa fa-eye"></i></a>
-                <a asp-area="Hr" asp-controller="Vacancies" asp-action="Delete" asp-route-id="@item.Id" title="Delete"><i class="fa fa-times"></i></a>
+                @String.Join(", ", item.NamesOfCities)
+            </td>
+            <td>
+                <a asp-area="Hr" asp-controller="Vacancies" asp-action="Edit" asp-route-id="@item.Id" title="Edit">
+                    <i class="fa fa-pencil-square-o"></i>
+                </a>
+                <a asp-area="Hr" asp-controller="Vacancies" asp-action="Details" asp-route-id="@item.Id" title="Details">
+                    <i class="fa fa-eye"></i>
+                </a>
+                <a asp-area="Hr" asp-controller="Vacancies" asp-action="Delete" asp-route-id="@item.Id" title="Delete" data-confirm="Are you sure you want to delete this?">
+                    <i class="fa fa-times"></i>
+                </a>
             </td>
         </tr>
         }
     </tbody>
 </table>
+
+@section StyleSheet {
+    @{Html.RenderPartial("_DataTableStyleSheetPartial");}
+}
+
+@section Scripts {
+    @{Html.RenderPartial("_DataTableScriptsPartial");}
+}

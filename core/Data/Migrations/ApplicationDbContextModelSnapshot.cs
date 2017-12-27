@@ -152,11 +152,11 @@ namespace Tochka.Data.Migrations
                     b.Property<string>("Annotation")
                         .HasColumnType("text");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("LatinName")
                         .IsRequired()
                         .HasColumnType("varchar(255)");
 
-                    b.Property<string>("LatinName")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("varchar(255)");
 
