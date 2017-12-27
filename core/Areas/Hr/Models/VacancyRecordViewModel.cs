@@ -10,8 +10,9 @@ namespace Tochka.Areas.Hr.Models
     {
         public int Id { get; set; }
 
-        [Required]
-        [StringLength(255)]
+        [Required(ErrorMessage = "Поле обязательно для заполнения.")]
+        [StringLength(255, ErrorMessage = "Максимальная длина строки 255 символов.")]
+        [Display(Name = "Название вакансии")]
         public string Name { get; set; }
 
         [StringLength(255)]
@@ -24,15 +25,18 @@ namespace Tochka.Areas.Hr.Models
             }
         }
 
-        [StringLength(4000)]
+        [StringLength(4000, ErrorMessage = "Максимальная длина строки 4000 символов.")]
+        [Display(Name = "Аннотация")]
         public string Annotation { get; set; }
 
-        [StringLength(4000)]
+        [StringLength(4000, ErrorMessage = "Максимальная длина строки 4000 символов.")]
+        [Display(Name = "Текст")]
         public string Text { get; set; }
 
         public IEnumerable<SelectListItem> CitiesForSelection { get; set; }
 
-        [NotNull]
+        [NotNull(ErrorMessage = "Поле обязательно для заполнения.")]
+        [Display(Name = "Город(а)")]
         public IEnumerable<int> ListCitiesIds { get; set; }
 
         public VacancyRecordViewModel() { }

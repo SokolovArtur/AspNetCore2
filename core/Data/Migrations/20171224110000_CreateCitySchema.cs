@@ -35,7 +35,7 @@ namespace Tochka.Data.Migrations
             migrationBuilder.InsertData(
                 table: "Cities",
                 columns: new string[] { "Name", "LatinName", "IsRepresentation" },
-                values: new object[] { "Санкт-Петербург ", "Sankt-Peterburg", true });
+                values: new object[] { "Санкт-Петербург", "Sankt-Peterburg", true });
             migrationBuilder.InsertData(
                 table: "Cities",
                 columns: new string[] { "Name", "LatinName", "IsRepresentation" },

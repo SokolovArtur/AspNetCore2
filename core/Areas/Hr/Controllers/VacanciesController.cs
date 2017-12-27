@@ -98,7 +98,7 @@ namespace Tochka.Areas.Hr.Controllers
             IEnumerable<Vacancy> duplicates = await _vacancy.DuplicatesAsync(vacancy, citiesIds);
             if (duplicates.Count() > 0)
             {
-                ModelState.AddModelError("", "Duplicate value.");
+                ModelState.AddModelError("", "Вакансия с текущим названием и городом уже существует.");
                 return View(vm);
             }
 
@@ -108,7 +108,7 @@ namespace Tochka.Areas.Hr.Controllers
             }
             catch (DbUpdateException)
             {
-                ModelState.AddModelError("", "Error saving.");
+                ModelState.AddModelError("", "Произошла ошибка при сохранении данных. Обратитесь за помощью к администратору.");
                 return View(vm);
             }
             return RedirectToAction(nameof(Index));
@@ -170,7 +170,7 @@ namespace Tochka.Areas.Hr.Controllers
             IEnumerable<Vacancy> duplicates = await _vacancy.DuplicatesAsync(vacancy, citiesIds);
             if (duplicates.Count() > 0)
             {
-                ModelState.AddModelError("", "Duplicate value.");
+                ModelState.AddModelError("", "Вакансия с текущим названием и городом уже существует.");
                 return View(vm);
             }
 
@@ -180,7 +180,7 @@ namespace Tochka.Areas.Hr.Controllers
             }
             catch (DbUpdateException)
             {
-                ModelState.AddModelError("", "Error saving.");
+                ModelState.AddModelError("", "Произошла ошибка при сохранении данных. Обратитесь за помощью к администратору.");
                 return View(vm);
             }
             return RedirectToAction(nameof(Index));

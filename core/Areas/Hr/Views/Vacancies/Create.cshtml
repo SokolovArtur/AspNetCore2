@@ -1,24 +1,20 @@
 ﻿@model Tochka.Areas.Hr.Models.VacancyRecordViewModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Создание вакансии";
 }
 
-<h2>Create</h2>
+<h2>Создание вакансии</h2>
 
-<h4>Vacancy</h4>
+<div class="section">
+    <form asp-area="Hr" asp-controller="Vacancies" asp-action="Create">
+        @{await Html.RenderPartialAsync("_RecordPartial");}
 
-<div class="row">
-    <div class="col-md-6">
-        <form asp-area="Hr" asp-controller="Vacancies" asp-action="Create">
-            @{await Html.RenderPartialAsync("_RecordPartial");}
-
-            <div>
-                <button type="submit" class="btn btn-primary">Create</button>
-                <a asp-area="Hr" asp-controller="Vacancies" asp-action="Index" class="btn btn-default">Back to List</a>
-            </div>
-        </form>
-    </div>
+        <div class="section">
+            <button type="submit" class="btn btn-primary">Создать</button>
+            <a asp-area="Hr" asp-controller="Vacancies" asp-action="Index" class="btn btn-default">Вернуться к списку</a>
+        </div>
+    </form>
 </div>
 
 @section StyleSheet {
