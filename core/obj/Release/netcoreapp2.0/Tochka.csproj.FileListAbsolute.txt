@@ -4,6 +4,7 @@
 /var/www/core/bin/Release/netcoreapp2.0/Tochka.dll
 /var/www/core/bin/Release/netcoreapp2.0/Tochka.pdb
 /var/www/core/obj/Release/netcoreapp2.0/Tochka.csproj.CoreCompileInputs.cache
+/var/www/core/obj/Release/netcoreapp2.0/UserSecretsAssemblyInfo.cs
 /var/www/core/obj/Release/netcoreapp2.0/Tochka.AssemblyInfoInputs.cache
 /var/www/core/obj/Release/netcoreapp2.0/Tochka.AssemblyInfo.cs
 /var/www/core/obj/Release/netcoreapp2.0/Tochka.dll

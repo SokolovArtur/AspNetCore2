@@ -2333,19 +2333,6 @@
           "lib/netstandard2.0/Microsoft.Extensions.Primitives.dll": {}
         }
       },
-      "Microsoft.Extensions.SecretManager.Tools/2.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.Configuration.UserSecrets": "2.0.0",
-          "Microsoft.NETCore.App": "2.0.0"
-        },
-        "compile": {
-          "lib/netcoreapp2.0/dotnet-user-secrets.dll": {}
-        },
-        "runtime": {
-          "lib/netcoreapp2.0/dotnet-user-secrets.dll": {}
-        }
-      },
       "Microsoft.Extensions.WebEncoders/2.0.0": {
         "type": "package",
         "dependencies": {
@@ -7012,18 +6999,6 @@
         "lib/netstandard2.0/Microsoft.Extensions.Primitives.xml",
         "microsoft.extensions.primitives.2.0.0.nupkg.sha512",
         "microsoft.extensions.primitives.nuspec"
-      ]
-    },
-    "Microsoft.Extensions.SecretManager.Tools/2.0.0": {
-      "sha512": "YojQ+ZAn+pHY7QVNgT4FDxCy9OW5JJ4FN2LdofTEmsp9/WKFW9vb//b+3UFMzTourwZoxfB1cdwCC1z2/+LJ/A==",
-      "type": "package",
-      "path": "microsoft.extensions.secretmanager.tools/2.0.0",
-      "files": [
-        "lib/netcoreapp2.0/dotnet-user-secrets.dll",
-        "lib/netcoreapp2.0/dotnet-user-secrets.runtimeconfig.json",
-        "microsoft.extensions.secretmanager.tools.2.0.0.nupkg.sha512",
-        "microsoft.extensions.secretmanager.tools.nuspec",
-        "prefercliruntime"
       ]
     },
     "Microsoft.Extensions.WebEncoders/2.0.0": {
@@ -13232,7 +13207,6 @@
       "CommonMark.NET >= 0.15.1",
       "Microsoft.AspNetCore.All >= 2.0.3",
       "Microsoft.EntityFrameworkCore.Tools >= 2.0.1",
-      "Microsoft.Extensions.SecretManager.Tools >= 2.0.0",
       "Microsoft.NETCore.App >= 2.0.0",
       "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 2.0.1",
       "Npgsql.EntityFrameworkCore.PostgreSQL >= 2.0.0"
@@ -13286,12 +13260,9 @@
             "version": "[2.0.3, )"
           },
           "Microsoft.EntityFrameworkCore.Tools": {
+            "suppressParent": "All",
             "target": "Package",
             "version": "[2.0.1, )"
-          },
-          "Microsoft.Extensions.SecretManager.Tools": {
-            "target": "Package",
-            "version": "[2.0.0, )"
           },
           "Microsoft.NETCore.App": {
             "target": "Package",
@@ -13299,6 +13270,7 @@
             "autoReferenced": true
           },
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
+            "suppressParent": "All",
             "target": "Package",
             "version": "[2.0.1, )"
           },

@@ -4,7 +4,7 @@
     $(document).ready(function() {
         var simplemde = [];
         $("main textarea").each(function (index) {
-            let textareaId = $(this).attr("id");
+            var textareaId = $(this).attr("id");
             simplemde[textareaId] = new SimpleMDE({ element: document.getElementById(textareaId) });
         });
     });

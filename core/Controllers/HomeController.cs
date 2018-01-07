@@ -8,7 +8,7 @@ namespace Tochka.Controllers
     {
         public IActionResult Index()
         {
-            return RedirectToAction("Index", "Home", new { area = "Hr" });
+            return View();
         }
 
         public IActionResult Error()

@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.0",
-    "signature": "3ae8f580d7cf6a72d2a2b04db28bfb38402e2e43"
+    "signature": "5ec97e8729df6f0387126e42ece7e61e7a623db1"
   },
   "compilationOptions": {
     "defines": [
@@ -26,7 +26,6 @@
           "CommonMark.NET": "0.15.1",
           "Microsoft.AspNetCore.All": "2.0.3",
           "Microsoft.EntityFrameworkCore.Tools": "2.0.1",
-          "Microsoft.Extensions.SecretManager.Tools": "2.0.0",
           "Microsoft.NETCore.App": "2.0.0",
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": "2.0.1",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "2.0.0"
@@ -2186,18 +2185,6 @@
         },
         "compile": {
           "lib/netstandard2.0/Microsoft.Extensions.Primitives.dll": {}
-        }
-      },
-      "Microsoft.Extensions.SecretManager.Tools/2.0.0": {
-        "dependencies": {
-          "Microsoft.Extensions.Configuration.UserSecrets": "2.0.0",
-          "Microsoft.NETCore.App": "2.0.0"
-        },
-        "runtime": {
-          "lib/netcoreapp2.0/dotnet-user-secrets.dll": {}
-        },
-        "compile": {
-          "lib/netcoreapp2.0/dotnet-user-secrets.dll": {}
         }
       },
       "Microsoft.Extensions.WebEncoders/2.0.0": {
@@ -5350,13 +5337,6 @@
       "sha512": "sha512-ukg53qNlqTrK38WA30b5qhw0GD7y3jdI9PHHASjdKyTcBHTevFM2o23tyk3pWCgAV27Bbkm+CPQ2zUe1ZOuYSA==",
       "path": "microsoft.extensions.primitives/2.0.0",
       "hashPath": "microsoft.extensions.primitives.2.0.0.nupkg.sha512"
-    },
-    "Microsoft.Extensions.SecretManager.Tools/2.0.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-YojQ+ZAn+pHY7QVNgT4FDxCy9OW5JJ4FN2LdofTEmsp9/WKFW9vb//b+3UFMzTourwZoxfB1cdwCC1z2/+LJ/A==",
-      "path": "microsoft.extensions.secretmanager.tools/2.0.0",
-      "hashPath": "microsoft.extensions.secretmanager.tools.2.0.0.nupkg.sha512"
     },
     "Microsoft.Extensions.WebEncoders/2.0.0": {
       "type": "package",

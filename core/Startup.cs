@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Tochka.Areas.Geodata.Data;
 using Tochka.Areas.Hr.Data;
 using Tochka.Data;
 using Tochka.Models;
+using Tochka.Services;
 
 namespace Tochka
 {
@@ -29,11 +30,19 @@ namespace Tochka
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Accounts/Auth/Login";
+                options.LogoutPath = "/Accounts/Auth/Logout";
+            });
 
-            services.AddMvc();
+            // Add application services.
+            services.AddTransient<IEmailSender, EmailSender>();
 
             services.AddTransient<ICityRepository, EFCityRepository>();
             services.AddTransient<IVacancyRepository, EFVacancyRepository>();
+
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

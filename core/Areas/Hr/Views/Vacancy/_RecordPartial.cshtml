@@ -1,0 +1,36 @@
+﻿@model RecordViewModel
+
+<div class="section">
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+</div>
+
+<div class="section">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="md-form">
+                <label asp-for="Name"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="ListCitiesIds"></label>
+            <select asp-for="ListCitiesIds" asp-items="Model.CitiesForSelection" class="mdb-select colorful-select dropdown-primary" multiple="multiple" searchable="Поиск">
+                <option value="" disabled>Выберите вариант(ы)</option>
+            </select>
+            <span asp-validation-for="ListCitiesIds" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 form-group">
+            <label asp-for="Annotation"></label>
+            <textarea type="text" asp-for="Annotation" class="form-control" rows="5"></textarea>
+            <span asp-validation-for="Annotation" class="text-danger"></span>
+        </div>
+        <div class="col-md-6 form-group">
+            <label asp-for="Text"></label>
+            <textarea type="text" asp-for="Text" class="form-control" rows="5"></textarea>
+            <span asp-validation-for="Text" class="text-danger"></span>
+        </div>
+    </div>
+</div>

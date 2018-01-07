@@ -1,0 +1,33 @@
+﻿@model ItemViewModel
+
+@{
+    ViewData["Title"] = "Пользователь";
+}
+
+<h2>Пользователь</h2>
+
+<div class="section">
+    <a asp-area="Accounts" asp-controller="User" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-default">Редактировать</a>
+    <a asp-area="Accounts" asp-controller="User" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger" data-confirm="Вы действительно хотите удалить?">Удалить</a>
+</div>
+
+<div class="section">
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.UserName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.UserName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+    </dl>
+</div>
+
+<div class="section">
+    <a asp-area="Accounts" asp-controller="User" asp-action="Index" class="btn btn-default">Вернуться к списку</a>
+</div>
