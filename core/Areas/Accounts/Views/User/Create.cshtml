@@ -4,10 +4,10 @@
     ViewData["Title"] = "Создание пользователя";
 }
 
-<h2>Создание пользователя</h2>
+<h2>@ViewData["Title"]</h2>
 
 <div class="section">
-    <form asp-area="Accounts" asp-controller="User" asp-action="Create">
+    <form method="post">
         @{await Html.RenderPartialAsync("_RecordPartial");}
 
         <div class="section">

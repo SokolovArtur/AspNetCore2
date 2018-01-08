@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +12,7 @@ using Tochka.Services;
 namespace Tochka.Areas.Accounts.Controllers
 {
     [Area("Accounts")]
+    [Authorize]
     public class UserController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -26,7 +29,13 @@ namespace Tochka.Areas.Accounts.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            return View(await _userManager.Users.ToListAsync());
+            IEnumerable<ApplicationUser> users = await _userManager.Users.ToListAsync();
+            return View(users.Select(um => new ItemViewModel
+            {
+                Id = um.Id,
+                UserName = um.UserName,
+                Email = um.Email
+            }));
         }
 
         [HttpGet]
@@ -52,14 +61,12 @@ namespace Tochka.Areas.Accounts.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public IActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
-        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("UserName,Email")] RecordViewModel model)
         {
@@ -71,12 +78,9 @@ namespace Tochka.Areas.Accounts.Controllers
                 {
                     return RedirectToAction(nameof(Index));
                 }
-                else
+                foreach (var error in result.Errors)
                 {
-                    foreach (var error in result.Errors)
-                    {
-                        ModelState.AddModelError(string.Empty, error.Description);
-                    }
+                    ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
 
@@ -107,48 +111,50 @@ namespace Tochka.Areas.Accounts.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Id, UserName,Email")] RecordViewModel model)
+        public async Task<IActionResult> Edit(string id, [Bind("Id, UserName, Email")] RecordViewModel model)
         {
-            if (id != model.Id || !ModelState.IsValid)
+            if (id == null || id != model.Id)
             {
-                return NotFound();
+                return BadRequest();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
             }
 
             var user = await _userManager.FindByIdAsync(id);
             if (user == null)
             {
-                return NotFound();
+                return BadRequest();
             }
 
             if (model.UserName != user.UserName)
             {
                 var setUserNameResult = await _userManager.SetUserNameAsync(user, model.UserName);
-                if (!setUserNameResult.Succeeded)
+                foreach (var error in setUserNameResult.Errors)
                 {
-                    foreach (var error in setUserNameResult.Errors)
-                    {
-                        ModelState.AddModelError("UserName", error.Description);
-                    }
-                    return View(model);
+                    ModelState.AddModelError("UserName", error.Description);
                 }
             }
             if (model.Email != user.Email)
             {
                 var setEmailResult = await _userManager.SetEmailAsync(user, model.Email);
-                if (!setEmailResult.Succeeded)
+                foreach (var error in setEmailResult.Errors)
                 {
-                    foreach (var error in setEmailResult.Errors)
-                    {
-                        ModelState.AddModelError("Email", error.Description);
-                    }
-                    return View(model);
+                    ModelState.AddModelError("Email", error.Description);
                 }
+            }
+            if (ModelState.ErrorCount > 0)
+            {
+                return View(model);
             }
 
             return RedirectToAction(nameof(Index));
         }
 
-        [HttpGet]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
@@ -162,34 +168,18 @@ namespace Tochka.Areas.Accounts.Controllers
                 return NotFound();
             }
 
-            await _userManager.DeleteAsync(user);
+            var result = await _userManager.DeleteAsync(user);
+            if (!result.Succeeded)
+            {
+                return BadRequest(result.Errors);
+            }
+            
             return RedirectToAction(nameof(Index));
         }
-
-        [HttpGet]
-        public async Task<IActionResult> ForgotPassword(string id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var user = await _userManager.FindByIdAsync(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            string code = await _userManager.GeneratePasswordResetTokenAsync(user);
-            string callbackUrl = Url.ResetPasswordCallbackLink(user.Id, code, Request.Scheme);
-            await _emailSender.SendEmailAsync(
-                user.Email,
-                "Reset Password",
-                $"Please reset your password by clicking here: <a href='{callbackUrl}'>link</a>");
-            return RedirectToAction(nameof(Index));
-        }
-
-        [HttpGet]
+        
+        /*
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> VerificationEmail(string id)
         {
             if (id == null)
@@ -206,7 +196,33 @@ namespace Tochka.Areas.Accounts.Controllers
             string code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             string callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
             await _emailSender.SendEmailConfirmationAsync(user.Email, callbackUrl);
-            return RedirectToAction(nameof(Index));
+
+            return Ok();
         }
+        */
+
+        /*
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ForgotPassword(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            string code = await _userManager.GeneratePasswordResetTokenAsync(user);
+            string callbackUrl = Url.ResetPasswordLink(user.Id, code, Request.Scheme);
+            await _emailSender.SendResetPasswordAsync(user.Email, callbackUrl);
+
+            return Ok();
+        }
+        */
     }
 }

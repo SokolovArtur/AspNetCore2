@@ -39,9 +39,10 @@
                     <a asp-area="Hr" asp-controller="Vacancy" asp-action="Edit" asp-route-id="@item.Id" title="Редактировать">
                         <i class="fa fa-pencil-square-o"></i>
                     </a>
-                    <a asp-area="Hr" asp-controller="Vacancy" asp-action="Delete" asp-route-id="@item.Id" title="Удалить" data-confirm="Вы действительно хотите удалить?">
-                        <i class="fa fa-times"></i>
-                    </a>
+                    <form asp-area="Hr" asp-controller="Vacancy" asp-action="Delete" asp-route-id="@item.Id" method="post" class="d-inline-block">
+                        <input type="hidden" asp-for="@item.Id" />
+                        <button type="submit" class="border-0" data-confirm="Вы действительно хотите удалить?"><i class="fa fa-times"></i></button>
+                    </form>
                 </td>
             </tr>
             }

@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Tochka.Areas.Geodata.Data;
@@ -10,6 +12,7 @@ using Tochka.Areas.Hr.Models.VacancyViewModels;
 namespace Tochka.Areas.Hr.Controllers
 {
     [Area("Hr")]
+    [Authorize]
     public class VacancyController : Controller
     {
         private readonly ICityRepository _city;
@@ -142,9 +145,9 @@ namespace Tochka.Areas.Hr.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,ListCitiesIds,Annotation,Text")] RecordViewModel model)
         {
-            if (id != model.Id || (await _vacancy.FindByIdAsync((int)id) == null))
+            if (id != model.Id || await _vacancy.FindByIdAsync(id) == null)
             {
-                return NotFound();
+                return BadRequest();
             }
 
             model.CitiesForSelection = _city.SelectListCities(await _city.RepresentationCitiesAsync());
@@ -184,7 +187,8 @@ namespace Tochka.Areas.Hr.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [HttpGet]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -197,8 +201,16 @@ namespace Tochka.Areas.Hr.Controllers
             {
                 return NotFound();
             }
-
-            await _vacancy.DeleteAsync(vacancy);
+            
+            try
+            {
+                await _vacancy.DeleteAsync(vacancy);
+            }
+            catch (DbUpdateException)
+            {
+                return BadRequest(new { Code = "NotDeleted", Description = "Error deleting data" });
+            }
+            
             return RedirectToAction(nameof(Index));
         }
     }

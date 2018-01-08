@@ -34,7 +34,5 @@ namespace Tochka.Areas.Hr.Models.VacancyViewModels
 
         [NotNull]
         public IEnumerable<int> ListCitiesIds { get; set; }
-
-        public RecordViewModel() { }
     }
 }

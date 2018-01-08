@@ -6,26 +6,27 @@
 }
 
 $(document).ready(function() {
-    // SideNav Initialization
-    $(".button-collapse").sideNav();
-
     // Sticky Footer
     StickyFooter();
     $(window).resize(function () {
         StickyFooter();
     });
 
-    // Material Select
-    $('.mdb-select').material_select();
-
-    // Delite Confirm
+    // Data Confirm
     $("[data-confirm]").click(function() {
         let message = $(this).attr("data-confirm");
         if (!message) {
-            message = "Вы действительно хотите удалить?";
+            message = "Подтвердите свои действия.";
         }
+
         if (!confirm(message)) {
             return false;
         }
     });
+
+    // MDBootstrap
+    $(".button-collapse").sideNav();
+    
+    $('.mdb-select').material_select();
+    // END MDBootstrap
 });

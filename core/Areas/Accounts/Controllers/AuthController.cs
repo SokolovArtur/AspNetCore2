@@ -4,17 +4,16 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Tochka.Areas.Accounts.Models.AuthViewModels;
-using Tochka.Controllers;
 using Tochka.Models;
 
 namespace Tochka.Areas.Accounts.Controllers
 {
     [Area("Accounts")]
+    [Authorize]
     public class AuthController : Controller
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
-        
 
         public AuthController(
             SignInManager<ApplicationUser> signInManager,
@@ -25,6 +24,7 @@ namespace Tochka.Areas.Accounts.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(string returnUrl = null)
         {
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
@@ -34,40 +34,52 @@ namespace Tochka.Areas.Accounts.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
+            
             if (ModelState.IsValid)
             {
                 var result = await _signInManager.PasswordSignInAsync(
                     model.UserName,
                     model.Password,
                     model.RememberMe,
-                    lockoutOnFailure: false);
-                if (result.Succeeded)
-                {
-                    return RedirectToLocal(returnUrl);
-                }
+                    lockoutOnFailure: true);
                 if (result.IsLockedOut)
                 {
                     return RedirectToAction(nameof(Lockout));
                 }
-                
-                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                return View(model);
+                if (result.Succeeded)
+                {
+                    if (Url.IsLocalUrl(returnUrl))
+                    {
+                        return Redirect(returnUrl);
+                    }
+                    else
+                    {
+                        return RedirectToAction(nameof(HomeController.Index), "Home", new { area = "" });
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                }
             }
 
             return View(model);
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Lockout()
         {
             return View();
         }
 
         [HttpPost]
+        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
@@ -87,14 +99,20 @@ namespace Tochka.Areas.Accounts.Controllers
             ApplicationUser user = await _userManager.FindByIdAsync(userId);
             if (user == null)
             {
-                return NotFound();
+                return BadRequest();
             }
             
-            await _userManager.ConfirmEmailAsync(user, code);
+            var result = await _userManager.ConfirmEmailAsync(user, code);
+            if (!result.Succeeded)
+            {
+                return BadRequest();
+            }
+            
             return View();
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> ResetPassword(string userId, string code)
         {
             if (userId == null || code == null)
@@ -105,25 +123,34 @@ namespace Tochka.Areas.Accounts.Controllers
             ApplicationUser user = await _userManager.FindByIdAsync(userId);
             if (user == null)
             {
-                return NotFound();
+                return BadRequest();
             }
  
             return View(new ResetPasswordViewModel { Id = userId, Code = code });
         }
 
         [HttpPost]
+        [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        public async Task<IActionResult> ResetPassword(string userId, string code, [Bind("Id, Code, Password, ConfirmPassword")] ResetPasswordViewModel model)
         {
+            if ((userId == null || userId != model.Id)
+                || (code == null || code != model.Code))
+            {
+                return BadRequest();
+            }
+
             if (!ModelState.IsValid)
             {
+                var r = ModelState;
+
                 return View(model);
             }
             
             var user = await _userManager.FindByIdAsync(model.Id);
             if (user == null)
             {
-                return NotFound();
+                return BadRequest();
             }
             
             var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
@@ -145,21 +172,5 @@ namespace Tochka.Areas.Accounts.Controllers
         {
             return View();
         }
-
-        #region Helpers
-        
-        private IActionResult RedirectToLocal(string returnUrl)
-        {
-            if (Url.IsLocalUrl(returnUrl))
-            {
-                return Redirect(returnUrl);
-            }
-            else
-            {
-                return RedirectToAction(nameof(HomeController.Index), "Home", new { area = "" });
-            }
-        }
-
-        #endregion
     }
 }

@@ -13,7 +13,5 @@ namespace Tochka.Areas.Hr.Models.VacancyViewModels
         public string Text { get; set; }
 
         public IEnumerable<string> NamesOfCities { get; set; }
-
-        public ItemViewModel() { }
     }
 }

@@ -1,10 +1,10 @@
-﻿@model IEnumerable<ApplicationUser>
+﻿@model IEnumerable<ItemViewModel>
 
 @{
     ViewData["Title"] = "Пользователи";
 }
 
-<h2>Пользователи</h2>
+<h2>@ViewData["Title"]</h2>
 
 <div class="section">
     <a asp-area="Accounts" asp-controller="User" asp-action="Create" class="btn btn-primary">Создать</a>
@@ -39,9 +39,12 @@
                     <a asp-area="Accounts" asp-controller="User" asp-action="Edit" asp-route-id="@item.Id" title="Редактировать">
                         <i class="fa fa-pencil-square-o"></i>
                     </a>
-                    <a asp-area="Accounts" asp-controller="User" asp-action="Delete" asp-route-id="@item.Id" title="Удалить" data-confirm="Вы действительно хотите удалить?">
-                        <i class="fa fa-times"></i>
-                    </a>
+                    <form asp-area="Accounts" asp-controller="User" asp-action="Delete" asp-route-id="@item.Id" method="post" class="d-inline-block">
+                        <input type="hidden" asp-for="@item.Id" />
+                        <button type="submit" class="border-0 no-padding" data-confirm="Вы действительно хотите удалить?" title="Удалить">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </form>
                 </td>
             </tr>
             }

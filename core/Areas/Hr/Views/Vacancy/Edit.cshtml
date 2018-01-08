@@ -7,7 +7,7 @@
 <h2>@ViewData["Title"]</h2>
 
 <div class="section">
-    <form asp-area="Hr" asp-controller="Vacancy" asp-action="Edit">
+    <form method="post">
         @{await Html.RenderPartialAsync("_RecordPartial");}
 
         <div class="section">

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Tochka.Areas.Accounts.Models.UserViewModels
 {
@@ -19,7 +20,7 @@ namespace Tochka.Areas.Accounts.Models.UserViewModels
         {
             get
             {
-                return "Pa$$w0rd";
+                return "GUID" + Guid.NewGuid().ToString("N");
             }
         }
     }
