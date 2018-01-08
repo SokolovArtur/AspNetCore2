@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Tochka.Areas.Accounts.Models.UserViewModels;
 using Tochka.Models;
@@ -34,7 +37,8 @@ namespace Tochka.Areas.Accounts.Controllers
             {
                 Id = um.Id,
                 UserName = um.UserName,
-                Email = um.Email
+                Email = um.Email,
+                LockoutEnd = um.LockoutEnd
             }));
         }
 
@@ -56,7 +60,8 @@ namespace Tochka.Areas.Accounts.Controllers
             {
                 Id = user.Id,
                 UserName = user.UserName,
-                Email = user.Email
+                Email = user.Email,
+                LockoutEnd = user.LockoutEnd
             });
         }
 
@@ -150,6 +155,61 @@ namespace Tochka.Areas.Accounts.Controllers
                 return View(model);
             }
 
+            return RedirectToAction(nameof(Index));
+        }
+        
+        [HttpGet]
+        public async Task<IActionResult> Lockout(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(new LockoutViewModel
+            {
+                Id = user.Id,
+                LockoutEnd = user.LockoutEnd
+            });
+        }
+        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Lockout(string id, [Bind("Id, TermId, LockoutEnd")] LockoutViewModel model)
+        {
+            if (id == null || id != model.Id)
+            {
+                return BadRequest();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return BadRequest();
+            }
+
+            user.LockoutEnd = model.LockoutEnd;
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+                return View(model);
+            }
+            
             return RedirectToAction(nameof(Index));
         }
 

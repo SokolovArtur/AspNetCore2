@@ -12,6 +12,7 @@
 --file=/var/www/core/Areas/Accounts/Views/User/Details.cshtml
 --file=/var/www/core/Areas/Accounts/Views/User/Edit.cshtml
 --file=/var/www/core/Areas/Accounts/Views/User/Index.cshtml
+--file=/var/www/core/Areas/Accounts/Views/User/Lockout.cshtml
 --file=/var/www/core/Areas/Accounts/Views/User/_RecordPartial.cshtml
 --file=/var/www/core/Areas/Accounts/Views/_ViewImports.cshtml
 --file=/var/www/core/Areas/Accounts/Views/_ViewStart.cshtml

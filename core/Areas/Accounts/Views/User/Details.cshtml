@@ -8,6 +8,7 @@
 
 <div class="section">
     <a asp-area="Accounts" asp-controller="User" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-default">Редактировать</a>
+    <a asp-area="Accounts" asp-controller="User" asp-action="Lockout" asp-route-id="@Model.Id" class="btn btn-danger">Блокировать</a>
     <form asp-area="Accounts" asp-controller="User" asp-action="Delete" asp-route-id="@Model.Id" method="post" class="d-inline-block">
         <input type="hidden" asp-for="@Model.Id" />
         <button type="submit" class="btn btn-danger" data-confirm="Вы действительно хотите удалить?">Удалить</button>
@@ -27,6 +28,12 @@
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.LockoutEnd)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LockoutEnd)
         </dd>
     </dl>
 </div>
