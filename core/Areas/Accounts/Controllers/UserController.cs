@@ -209,6 +209,7 @@ namespace Tochka.Areas.Accounts.Controllers
                 }
                 return View(model);
             }
+            await _userManager.UpdateSecurityStampAsync(user);
             
             return RedirectToAction(nameof(Index));
         }

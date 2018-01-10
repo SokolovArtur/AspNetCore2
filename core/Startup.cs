@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -27,8 +28,9 @@ namespace Tochka
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>(opts => {
-                    opts.Password.RequireNonAlphanumeric = false;
+            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+                {
+                    options.Password.RequireNonAlphanumeric = false;
                 })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
@@ -37,6 +39,9 @@ namespace Tochka
                 options.LoginPath = "/Accounts/Auth/Login";
                 options.LogoutPath = "/Accounts/Auth/Logout";
             });
+            services.Configure<SecurityStampValidatorOptions>(
+                options => { options.ValidationInterval = TimeSpan.FromMinutes(5); });
+            
 
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
