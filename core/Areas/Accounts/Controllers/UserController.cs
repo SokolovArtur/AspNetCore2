@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Tochka.Areas.Accounts.Data;
 using Tochka.Areas.Accounts.Models.UserViewModels;
-using Tochka.Models;
 using Tochka.Services;
 
 namespace Tochka.Areas.Accounts.Controllers

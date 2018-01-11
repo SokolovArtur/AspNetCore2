@@ -2,9 +2,10 @@
 using System.Linq;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Tochka.Areas.Geodata.Data;
 using Tochka.Data;
 
-namespace Tochka.Areas.Geodata.Data
+namespace Tochka.Areas.Geodata.Services
 {
     public class EFCityRepository : ICityRepository
     {
@@ -22,7 +23,7 @@ namespace Tochka.Areas.Geodata.Data
             return Cities
                 .Where(c => c.IsRepresentation == true);
         }
-        
+    
         public IEnumerable<SelectListItem> SelectListCities(IEnumerable<City> cities)
         {
             return cities

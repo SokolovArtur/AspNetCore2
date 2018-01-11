@@ -3,9 +3,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Tochka.Areas.Geodata.Data;
+using Tochka.Areas.Geodata.Services;
+using Tochka.Areas.Hr.Data;
 using Tochka.Data;
 
-namespace Tochka.Areas.Hr.Data
+namespace Tochka.Areas.Hr.Services
 {
     public class EFVacancyRepository : IVacancyRepository
     {

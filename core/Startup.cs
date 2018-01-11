@@ -5,10 +5,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Tochka.Areas.Geodata.Data;
-using Tochka.Areas.Hr.Data;
+using Tochka.Areas.Accounts.Data;
+using Tochka.Areas.Geodata.Services;
+using Tochka.Areas.Hr.Services;
 using Tochka.Data;
-using Tochka.Models;
 using Tochka.Services;
 
 namespace Tochka
@@ -41,7 +41,6 @@ namespace Tochka
             });
             services.Configure<SecurityStampValidatorOptions>(
                 options => { options.ValidationInterval = TimeSpan.FromMinutes(5); });
-            
 
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();

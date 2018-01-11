@@ -4,9 +4,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Tochka.Areas.Geodata.Data;
+using Tochka.Areas.Geodata.Services;
 using Tochka.Areas.Hr.Data;
 using Tochka.Areas.Hr.Models.VacancyViewModels;
+using Tochka.Areas.Hr.Services;
 
 namespace Tochka.Areas.Hr.Controllers
 {

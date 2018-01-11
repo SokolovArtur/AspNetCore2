@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Tochka.Areas.Accounts.Data;
 using Tochka.Areas.Accounts.Models.AuthViewModels;
-using Tochka.Models;
 
 namespace Tochka.Areas.Accounts.Controllers
 {

@@ -1,4 +1,4 @@
-namespace Tochka.Models
+namespace Tochka.Models.HomeViewModels
 {
     public class ErrorViewModel
     {

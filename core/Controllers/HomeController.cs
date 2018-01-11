@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Tochka.Models;
+using Tochka.Models.HomeViewModels;
 
 namespace Tochka.Controllers
 {

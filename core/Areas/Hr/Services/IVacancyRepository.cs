@@ -2,8 +2,9 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Tochka.Areas.Geodata.Data;
+using Tochka.Areas.Hr.Data;
 
-namespace Tochka.Areas.Hr.Data
+namespace Tochka.Areas.Hr.Services
 {
     public interface IVacancyRepository
     {

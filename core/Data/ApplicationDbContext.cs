@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Tochka.Areas.Accounts.Data;
 using Tochka.Areas.Geodata.Data;
 using Tochka.Areas.Hr.Data;
-using Tochka.Models;
 
 namespace Tochka.Data
 {
