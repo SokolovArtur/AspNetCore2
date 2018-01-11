@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Tochka.Areas.Geodata.Data
@@ -9,8 +8,8 @@ namespace Tochka.Areas.Geodata.Data
     {
         IQueryable<City> Cities { get; }
 
+        IQueryable<City> GetRepresentationCities();
+        
         IEnumerable<SelectListItem> SelectListCities(IEnumerable<City> cities);
-
-        Task<IEnumerable<City>> RepresentationCitiesAsync();
     }
 }

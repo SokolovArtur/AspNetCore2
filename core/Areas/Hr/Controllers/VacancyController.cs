@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Tochka.Areas.Geodata.Data;
@@ -28,18 +27,14 @@ namespace Tochka.Areas.Hr.Controllers
         public async Task<IActionResult> Index()
         {
             IEnumerable<Vacancy> vacancies = await _vacancy.Vacancies.ToListAsync();
-            var model = new List<ItemViewModel>();
-            foreach (Vacancy vacancy in vacancies)
+            var model = vacancies.Select(vacancy => new ItemViewModel
             {
-                model.Add(new ItemViewModel
-                {
-                    Id = vacancy.Id,
-                    Name = vacancy.Name,
-                    Annotation = vacancy.Annotation,
-                    Text = vacancy.Text,
-                    NamesOfCities = await _vacancy.NamesOfCitiesInVacancyAsync(vacancy.Id)
-                });
-            }
+                Id = vacancy.Id,
+                Name = vacancy.Name,
+                Annotation = vacancy.Annotation,
+                Text = vacancy.Text,
+                NamesOfCities = _vacancy.GetCitiesInVacancy(vacancy.Id).Select(city => city.Name)
+            });
             return View(model);
         }
 
@@ -63,7 +58,7 @@ namespace Tochka.Areas.Hr.Controllers
                 Name = vacancy.Name,
                 Annotation = vacancy.Annotation,
                 Text = vacancy.Text,
-                NamesOfCities = await _vacancy.NamesOfCitiesInVacancyAsync(vacancy.Id)
+                NamesOfCities = await _vacancy.GetCitiesInVacancy(vacancy.Id).Select(city => city.Name).ToListAsync()
             });
         }
 
@@ -72,7 +67,7 @@ namespace Tochka.Areas.Hr.Controllers
         {
             return View(new RecordViewModel
             {
-                CitiesForSelection = _city.SelectListCities(await _city.RepresentationCitiesAsync())
+                CitiesForSelection = _city.SelectListCities(await _city.GetRepresentationCities().ToListAsync())
             });
         }
 
@@ -80,7 +75,7 @@ namespace Tochka.Areas.Hr.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Name,ListCitiesIds,Annotation,Text")] RecordViewModel model)
         {
-            model.CitiesForSelection = _city.SelectListCities(await _city.RepresentationCitiesAsync());
+            model.CitiesForSelection = _city.SelectListCities(await _city.GetRepresentationCities().ToListAsync());
 
             if (!ModelState.IsValid)
             {
@@ -96,13 +91,6 @@ namespace Tochka.Areas.Hr.Controllers
             };
             var citiesIds = new List<int>();
             citiesIds.AddRange(model.ListCitiesIds);
-
-            IEnumerable<Vacancy> duplicates = await _vacancy.DuplicatesAsync(vacancy, citiesIds);
-            if (duplicates.Count() > 0)
-            {
-                ModelState.AddModelError(string.Empty, "Duplicate");
-                return View(model);
-            }
 
             try
             {
@@ -136,8 +124,8 @@ namespace Tochka.Areas.Hr.Controllers
                 Name = vacancy.Name,
                 Annotation = vacancy.Annotation,
                 Text = vacancy.Text,
-                CitiesForSelection = _city.SelectListCities(await _city.RepresentationCitiesAsync()),
-                ListCitiesIds = await _vacancy.CitiesIdsInVacancyAsync(vacancy.Id)
+                CitiesForSelection = _city.SelectListCities(await _city.GetRepresentationCities().ToListAsync()),
+                ListCitiesIds = await _vacancy.GetCitiesInVacancy(vacancy.Id).Select(city => city.Id).ToListAsync()
             });
         }
 
@@ -150,7 +138,7 @@ namespace Tochka.Areas.Hr.Controllers
                 return BadRequest();
             }
 
-            model.CitiesForSelection = _city.SelectListCities(await _city.RepresentationCitiesAsync());
+            model.CitiesForSelection = _city.SelectListCities(await _city.GetRepresentationCities().ToListAsync());
 
             if (!ModelState.IsValid)
             {
@@ -167,13 +155,6 @@ namespace Tochka.Areas.Hr.Controllers
             };
             var citiesIds = new List<int>();
             citiesIds.AddRange(model.ListCitiesIds);
-
-            IEnumerable<Vacancy> duplicates = await _vacancy.DuplicatesAsync(vacancy, citiesIds);
-            if (duplicates.Count() > 0)
-            {
-                ModelState.AddModelError(string.Empty, "Duplicate");
-                return View(model);
-            }
 
             try
             {
@@ -212,6 +193,13 @@ namespace Tochka.Areas.Hr.Controllers
             }
             
             return RedirectToAction(nameof(Index));
+        }
+        
+        [HttpGet]
+        public IActionResult RemoteVacancyIsUnique(IEnumerable<int> listCitiesIds, int id, string name)
+        {
+            var result = _vacancy.GetDuplicates(new Vacancy { Id = id, Name = name }, listCitiesIds);
+            return Json(result == null || !result.Any());
         }
     }
 }

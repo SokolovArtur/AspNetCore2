@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Tochka.Attributes;
 using Tochka.Models;
@@ -12,6 +13,7 @@ namespace Tochka.Areas.Hr.Models.VacancyViewModels
 
         [Required]
         [StringLength(255)]
+        [Remote(areaName: "Hr", controller: "Vacancy", action: "RemoteVacancyIsUnique", AdditionalFields = "Id, ListCitiesIds")]
         public string Name { get; set; }
 
         [StringLength(255)]

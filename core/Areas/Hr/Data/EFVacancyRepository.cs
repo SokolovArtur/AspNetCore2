@@ -22,19 +22,14 @@ namespace Tochka.Areas.Hr.Data
 
         private IQueryable<VacancyCity> VacanciesCities => _context.VacanciesCities.AsNoTracking();
 
-        public async Task<IEnumerable<int>> CitiesIdsInVacancyAsync(int vacancyId)
-        {
-            return await VacanciesCities.Where(vc => vc.VacancyId == vacancyId).Select(vc => vc.CityId).ToListAsync();
-        }
-
-        public async Task DeleteAsync(Vacancy vacancy)
+        public async Task DeleteAsync(Vacancy model)
         {
             using (var transaction = _context.Database.BeginTransaction())
             {
                 try
                 {
-                    await DeleteVacancyCityRangeAsync(new List<Vacancy> { vacancy });
-                    _context.Remove(vacancy);
+                    await DeleteAllVacancyCityByVacancyId(model.Id);
+                    _context.Remove(model);
                     await _context.SaveChangesAsync();
 
                     transaction.Commit();
@@ -47,60 +42,51 @@ namespace Tochka.Areas.Hr.Data
             }
         }
 
-        public async Task<IEnumerable<Vacancy>> DuplicatesAsync(Vacancy vacancy, int cityId)
-        {
-            return await DuplicatesAsync(vacancy, new List<int> { cityId });
-        }
-
-        public async Task<IEnumerable<Vacancy>> DuplicatesAsync(Vacancy vacancy, List<int> citiesIds)
-        {
-            IEnumerable<Vacancy> duplicates = await VacanciesCities
-                .Where(vc =>
-                    citiesIds.Contains(vc.CityId)
-                    && vc.Vacancy.Name == vacancy.Name
-                    && vc.Vacancy.Id != vacancy.Id)
-                .Select(vc => new Vacancy
-                {
-                    Id = vc.Vacancy.Id,
-                    Name = vc.Vacancy.Name,
-                    LatinName = vc.Vacancy.LatinName,
-                    Annotation = vc.Vacancy.Annotation,
-                    Text = vc.Vacancy.Text
-                })
-                .ToListAsync();
-            return duplicates;
-        }
-
         public async Task<Vacancy> FindByIdAsync(int vacancyId)
         {
             var vacancy = await Vacancies.SingleOrDefaultAsync(m => m.Id == vacancyId);
             return vacancy;
         }
 
-        public async Task<IEnumerable<string>> NamesOfCitiesInVacancyAsync(int vacancyId)
+        public IQueryable<City> GetCitiesInVacancy(int vacancyId)
         {
-            return await _city.Cities
-                .Join(VacanciesCities, c => c.Id, vc => vc.CityId, (c, vc) => new { vc.VacancyId, c.Name })
-                .Where(m => m.VacancyId == vacancyId)
-                .Select(m => m.Name)
-                .ToListAsync();
+            return _city.Cities
+                .Join(VacanciesCities, city => city.Id, vacancyCity => vacancyCity.CityId,
+                    (city, vacancyCity) => new {vacancyCity.VacancyId, city})
+                .Where(model => model.VacancyId == vacancyId)
+                .Select(model => model.city);
         }
 
-        public async Task SaveAsync(Vacancy vacancy, List<int> citiesIds)
+        public IQueryable<Vacancy> GetDuplicates(Vacancy model, IEnumerable<int> citiesIds)
+        {
+            if (model.Name == null)
+            {
+                return null;
+            }
+
+            citiesIds = citiesIds ?? Enumerable.Empty<int>();
+            return VacanciesCities
+                .Where(vacancyCity => vacancyCity.Vacancy.Name == model.Name && vacancyCity.Vacancy.Id != model.Id &&
+                                      citiesIds.Contains(vacancyCity.CityId))
+                .Select(vacancyCity => vacancyCity.Vacancy);
+        }
+
+        public async Task SaveAsync(Vacancy model, IEnumerable<int> citiesIds)
         {
             using (var transaction = _context.Database.BeginTransaction())
             {
-                int savedVacancies = 0;
+                int savedVacancies;
                 try
                 {
-                    if (vacancy.Id > 0)
+                    if (model.Id > 0)
                     {
-                        _context.Update(vacancy);
+                        _context.Update(model);
                     }
                     else
                     {
-                        _context.Add(vacancy);
+                        _context.Add(model);
                     }
+
                     savedVacancies = await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateException)
@@ -114,11 +100,11 @@ namespace Tochka.Areas.Hr.Data
                     try
                     {
                         var vacanciesCities = new List<VacancyCity>();
-                        foreach (int cityId in citiesIds)
+                        foreach (var cityId in citiesIds)
                         {
                             vacanciesCities.Add(new VacancyCity
                             {
-                                VacancyId = vacancy.Id,
+                                VacancyId = model.Id,
                                 CityId = cityId
                             });
                         }
@@ -134,51 +120,34 @@ namespace Tochka.Areas.Hr.Data
                 transaction.Commit();
             }
         }
-
-        private async Task DeleteVacancyCityRangeAsync(IEnumerable<VacancyCity> vacanciesCities)
+        
+        private async Task DeleteAllVacancyCityByVacancyId(int vacancyId)
         {
-            IEnumerable<int> vacanciesIds = vacanciesCities.GroupBy(vc => vc.VacancyId).Select(vc => vc.Key);
-            foreach (var vacancyId in vacanciesIds)
+            var vacancyCities = VacanciesCities.Where(vacancyCity => vacancyCity.VacancyId == vacancyId);
+            if (vacancyCities.Any())
             {
-                _context.RemoveRange(VacanciesCities.Where(vm => vm.VacancyId == vacancyId));
-            }
-            await _context.SaveChangesAsync();
-        }
-
-        private async Task DeleteVacancyCityRangeAsync(IEnumerable<Vacancy> vacancies)
-        {
-            foreach (var vacancy in vacancies)
-            {
-                _context.RemoveRange(VacanciesCities.Where(vm => vm.VacancyId == vacancy.Id));
-            }
-            await _context.SaveChangesAsync();
-        }
-
-        private async Task SaveVacancyCityRangeAsync(IEnumerable<VacancyCity> vacanciesCities)
-        {
-            try
-            {
-                await DeleteVacancyCityRangeAsync(vacanciesCities);
-            }
-            catch (DbUpdateException)
-            {
-                throw;
-            }
-
-            try
-            {
-                await _context.AddRangeAsync(
-                    vacanciesCities.Select(vc => new VacancyCity
-                    {
-                        VacancyId = vc.VacancyId,
-                        CityId = vc.CityId
-                    })
-                );
+                _context.RemoveRange(vacancyCities);
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateException)
+        }
+
+        private async Task DeleteVacancyCityRangeAsync(IEnumerable<VacancyCity> models)
+        {
+            IEnumerable<int> vacanciesIds = models.GroupBy(vacancyCity => vacancyCity.VacancyId)
+                .Select(vacancyCity => vacancyCity.Key);
+            foreach (var vacancyId in vacanciesIds)
             {
-                throw;
+                await DeleteAllVacancyCityByVacancyId(vacancyId);
+            }
+        }
+
+        private async Task SaveVacancyCityRangeAsync(IEnumerable<VacancyCity> models)
+        {
+            if (models.Any())
+            {
+                await DeleteVacancyCityRangeAsync(models);
+                await _context.AddRangeAsync(models);
+                await _context.SaveChangesAsync();
             }
         }
     }

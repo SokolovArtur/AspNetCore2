@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Tochka.Areas.Geodata.Data;
 
 namespace Tochka.Areas.Hr.Data
 {
@@ -8,18 +9,14 @@ namespace Tochka.Areas.Hr.Data
     {
         IQueryable<Vacancy> Vacancies { get; }
 
-        Task<IEnumerable<int>> CitiesIdsInVacancyAsync(int vacancyId);
-
-        Task DeleteAsync(Vacancy vacancy);
-
-        Task<IEnumerable<Vacancy>> DuplicatesAsync(Vacancy vacancy, int cityId);
-
-        Task<IEnumerable<Vacancy>> DuplicatesAsync(Vacancy vacancy, List<int> citiesIds);
+        Task DeleteAsync(Vacancy model);
 
         Task<Vacancy> FindByIdAsync(int vacancyId);
 
-        Task<IEnumerable<string>> NamesOfCitiesInVacancyAsync(int vacancyId);
+        IQueryable<City> GetCitiesInVacancy(int vacancyId);
+        
+        IQueryable<Vacancy> GetDuplicates(Vacancy model, IEnumerable<int> citiesIds);
 
-        Task SaveAsync(Vacancy vacancy, List<int> citiesIds);
+        Task SaveAsync(Vacancy vacancy, IEnumerable<int> citiesIds);
     }
 }

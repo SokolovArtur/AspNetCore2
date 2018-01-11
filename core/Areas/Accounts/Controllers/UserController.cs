@@ -285,5 +285,19 @@ namespace Tochka.Areas.Accounts.Controllers
             return Ok();
         }
         */
+        
+        [HttpGet]
+        public async Task<IActionResult> RemoteUserNameIsUnique(string Id, string userName)
+        {
+            ApplicationUser user = await _userManager.FindByNameAsync(userName);
+            return Json(user == null || user.Id == Id);
+        }
+        
+        [HttpGet]
+        public async Task<IActionResult> RemoteEmailIsUnique(string Id, string email)
+        {
+            ApplicationUser user = await _userManager.FindByEmailAsync(email);
+            return Json(user == null || user.Id == Id);
+        }
     }
 }
