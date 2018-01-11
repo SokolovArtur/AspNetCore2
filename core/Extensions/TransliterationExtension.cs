@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 
-namespace Tochka.Models
+namespace Tochka.Extensions
 {
     /// <summary>
     /// Cyrillic-latin transliteration (support only slavik languages) by GOST 7.79-2000 (ISO 9).
     /// </summary>
-    public static class Transliteration
+    public static class TransliterationExtension
     {
         /// <summary>
         /// Transliterate cyrillic string to latin.

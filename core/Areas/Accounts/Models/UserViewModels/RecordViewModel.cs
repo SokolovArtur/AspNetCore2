@@ -1,6 +1,7 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Tochka.Areas.Accounts.Extensions;
 
 namespace Tochka.Areas.Accounts.Models.UserViewModels
 {
@@ -23,7 +24,15 @@ namespace Tochka.Areas.Accounts.Models.UserViewModels
         {
             get
             {
-                return "GUID" + Guid.NewGuid().ToString("N");
+                return PasswordGeneratorExtension.Generate(new PasswordOptions
+                {
+                    RequiredLength = 8,
+                    RequiredUniqueChars = 4,
+                    RequireDigit = true,
+                    RequireLowercase = true,
+                    RequireNonAlphanumeric = false,
+                    RequireUppercase = true
+                });
             }
         }
     }

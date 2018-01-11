@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Tochka.Attributes;
-using Tochka.Models;
+using Tochka.Extensions;
 
 namespace Tochka.Areas.Hr.Models.VacancyViewModels
 {
@@ -21,7 +21,7 @@ namespace Tochka.Areas.Hr.Models.VacancyViewModels
         {
             get
             {
-                string href = Transliteration.CyrillicToLatin(Name);
+                string href = TransliterationExtension.CyrillicToLatin(Name);
                 return href.Replace("`", "").Replace("'", "");
             }
         }
