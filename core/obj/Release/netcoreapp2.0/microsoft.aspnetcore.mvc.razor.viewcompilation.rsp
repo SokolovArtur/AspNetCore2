@@ -27,8 +27,10 @@
 --file=/var/www/core/Areas/Hr/Views/_ViewStart.cshtml
 --file=/var/www/core/Views/Home/Error.cshtml
 --file=/var/www/core/Views/Home/Index.cshtml
---file=/var/www/core/Views/Shared/Components/SideNav/Default.cshtml
---file=/var/www/core/Views/Shared/Components/SideNav/Empty.cshtml
+--file=/var/www/core/Views/Shared/Components/Menu/Cards.cshtml
+--file=/var/www/core/Views/Shared/Components/Menu/Default.cshtml
+--file=/var/www/core/Views/Shared/Components/Menu/Empty.cshtml
+--file=/var/www/core/Views/Shared/Components/Menu/SideNav.cshtml
 --file=/var/www/core/Views/Shared/_DataTableScriptsPartial.cshtml
 --file=/var/www/core/Views/Shared/_DataTableStyleSheetPartial.cshtml
 --file=/var/www/core/Views/Shared/_Layout.cshtml

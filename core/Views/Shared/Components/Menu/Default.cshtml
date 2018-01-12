@@ -1,0 +1,13 @@
+﻿@model Dictionary<string, IEnumerable<Tochka.Models.MenuItem>>
+
+<ul>
+    @foreach (var item in Model)
+    {
+        foreach (var subitem in item.Value)
+        {
+            <li>
+                <a asp-area="@subitem.Area" asp-controller="@subitem.Controller" asp-action="@subitem.Action">@subitem.Name</a>
+            </li>
+        }
+    }
+</ul>
