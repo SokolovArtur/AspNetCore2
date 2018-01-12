@@ -1,0 +1,12 @@
+Accounts:
+  - name: Users
+    area: Accounts
+    controller: User
+    action: Index
+    anonymous: true
+HR:
+  - name: Vacancies
+    area: HR
+    controller: Vacancy
+    action: Index
+    anonymous: true

@@ -8,6 +8,7 @@
 --file=/var/www/core/Areas/Accounts/Views/Auth/ResetPassword.cshtml
 --file=/var/www/core/Areas/Accounts/Views/Auth/ResetPasswordConfirmation.cshtml
 --file=/var/www/core/Areas/Accounts/Views/Auth/_Layout.cshtml
+--file=/var/www/core/Areas/Accounts/Views/Home/Index.cshtml
 --file=/var/www/core/Areas/Accounts/Views/User/Create.cshtml
 --file=/var/www/core/Areas/Accounts/Views/User/Details.cshtml
 --file=/var/www/core/Areas/Accounts/Views/User/Edit.cshtml
@@ -16,6 +17,7 @@
 --file=/var/www/core/Areas/Accounts/Views/User/_RecordPartial.cshtml
 --file=/var/www/core/Areas/Accounts/Views/_ViewImports.cshtml
 --file=/var/www/core/Areas/Accounts/Views/_ViewStart.cshtml
+--file=/var/www/core/Areas/Hr/Views/Home/Index.cshtml
 --file=/var/www/core/Areas/Hr/Views/Vacancy/Create.cshtml
 --file=/var/www/core/Areas/Hr/Views/Vacancy/Details.cshtml
 --file=/var/www/core/Areas/Hr/Views/Vacancy/Edit.cshtml
@@ -23,8 +25,10 @@
 --file=/var/www/core/Areas/Hr/Views/Vacancy/_RecordPartial.cshtml
 --file=/var/www/core/Areas/Hr/Views/_ViewImports.cshtml
 --file=/var/www/core/Areas/Hr/Views/_ViewStart.cshtml
+--file=/var/www/core/Views/Home/Error.cshtml
 --file=/var/www/core/Views/Home/Index.cshtml
---file=/var/www/core/Views/Shared/Error.cshtml
+--file=/var/www/core/Views/Shared/Components/SideNav/Default.cshtml
+--file=/var/www/core/Views/Shared/Components/SideNav/Empty.cshtml
 --file=/var/www/core/Views/Shared/_DataTableScriptsPartial.cshtml
 --file=/var/www/core/Views/Shared/_DataTableStyleSheetPartial.cshtml
 --file=/var/www/core/Views/Shared/_Layout.cshtml

@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.0",
-    "signature": "5ec97e8729df6f0387126e42ece7e61e7a623db1"
+    "signature": "79d7df96367e9b348b5056923ff03b1367dc3edc"
   },
   "compilationOptions": {
     "defines": [
@@ -28,7 +28,8 @@
           "Microsoft.EntityFrameworkCore.Tools": "2.0.1",
           "Microsoft.NETCore.App": "2.0.0",
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": "2.0.1",
-          "Npgsql.EntityFrameworkCore.PostgreSQL": "2.0.0"
+          "Npgsql.EntityFrameworkCore.PostgreSQL": "2.0.0",
+          "YamlDotNet": "4.2.3"
         },
         "runtime": {
           "Tochka.dll": {}
@@ -4090,6 +4091,14 @@
           "lib/netstandard1.3/Microsoft.WindowsAzure.Storage.dll": {}
         }
       },
+      "YamlDotNet/4.2.3": {
+        "runtime": {
+          "lib/netstandard1.3/YamlDotNet.dll": {}
+        },
+        "compile": {
+          "lib/netstandard1.3/YamlDotNet.dll": {}
+        }
+      },
       "Microsoft.NETCore.App/2.0.0": {
         "dependencies": {
           "Microsoft.NETCore.DotNetHostPolicy": "2.0.0",
@@ -6422,6 +6431,13 @@
       "sha512": "sha512-W6ZZ0/o7+3Qb77mRAQyLjPudHG3OMeeQ4p9yY13PUdJArmRCx2cLMm5F4tpIjJXxzHC0ew0oK7DMDGILMdfCnw==",
       "path": "windowsazure.storage/8.1.4",
       "hashPath": "windowsazure.storage.8.1.4.nupkg.sha512"
+    },
+    "YamlDotNet/4.2.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ZAGjxozwteyECBckC3m6qJrIXGoYCttlinvsi7c3GgM1rgM/YeR+pNy8Blz7SHk2/vjzzpJdw3seso/MUqpVSA==",
+      "path": "yamldotnet/4.2.3",
+      "hashPath": "yamldotnet.4.2.3.nupkg.sha512"
     },
     "Microsoft.NETCore.App/2.0.0": {
       "type": "package",

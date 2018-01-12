@@ -9,7 +9,7 @@ namespace Tochka.Areas.Accounts.Controllers
     {
         public IActionResult Index()
         {
-            return RedirectToAction("Index", "User", new { area = "Accounts" });
+            return View();
         }
     }
 }

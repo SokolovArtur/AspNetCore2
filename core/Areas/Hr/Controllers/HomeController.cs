@@ -9,7 +9,7 @@ namespace Tochka.Areas.Hr.Controllers
     {
         public IActionResult Index()
         {
-            return RedirectToAction("Index", "Vacancy", new { area = "Hr" });
+            return View();
         }
     }
 }
