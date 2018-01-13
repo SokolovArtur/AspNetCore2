@@ -42,7 +42,7 @@
             <!--/. SideNav slide-out button -->
 
             <!--Navbar links-->
-            @{await Html.RenderPartialAsync("_LoginPartial");}
+            @await Component.InvokeAsync("Login")
             <!--/Navbar links-->
 
         </nav>

@@ -34,13 +34,14 @@ namespace Tochka
                 })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+
+            services.Configure<SecurityStampValidatorOptions>(
+                options => { options.ValidationInterval = TimeSpan.FromMinutes(5); });
             services.ConfigureApplicationCookie(options =>
             {
                 options.LoginPath = "/Accounts/Auth/Login";
                 options.LogoutPath = "/Accounts/Auth/Logout";
             });
-            services.Configure<SecurityStampValidatorOptions>(
-                options => { options.ValidationInterval = TimeSpan.FromMinutes(5); });
 
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
