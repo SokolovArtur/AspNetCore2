@@ -30,7 +30,7 @@
     "commit": "6abda7ab68cc20f4aca870eb243747951b90ab04"
   },
   "_source": "https://github.com/sparksuite/simplemde-markdown-editor.git",
-  "_target": "1.11.2",
+  "_target": "^1.11.2",
   "_originalSource": "simplemde",
   "_direct": true
 }
