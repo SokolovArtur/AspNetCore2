@@ -39,8 +39,8 @@ namespace Tochka
                 options => { options.ValidationInterval = TimeSpan.FromMinutes(5); });
             services.ConfigureApplicationCookie(options =>
             {
-                options.LoginPath = "/Accounts/Auth/Login";
-                options.LogoutPath = "/Accounts/Auth/Logout";
+                options.LoginPath = "/Backend/Accounts/Auth/Login";
+                options.LogoutPath = "/Backend/Accounts/Auth/Logout";
             });
 
             // Add application services.
@@ -63,7 +63,7 @@ namespace Tochka
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/Backend/Home/Error");
             }
 
             app.UseStaticFiles();
@@ -74,11 +74,11 @@ namespace Tochka
             {
                 routes.MapRoute(
                     name: "area",
-                    template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+                    template: "Backend/{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "Backend/{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

@@ -6,7 +6,7 @@ Accounts:
     anonymous: false
 HR:
   - name: Vacancies
-    area: HR
+    area: Hr
     controller: Vacancy
     action: Index
     anonymous: false

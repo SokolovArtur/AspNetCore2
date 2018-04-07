@@ -4,14 +4,22 @@ services:
   core:
     build:
       context: ./core
-    command: dotnet watch /var/www/core/bin/Release/netcoreapp2.0/Tochka.dll
     depends_on:
       - db
     expose:
       - 5000
     image: "core"
+#    volumes:
+#     - ./core:/var/www/core
+
+  frontend:
+    build:
+      context: ./frontend
+    expose:
+      - 80
+    image: "frontend"
     volumes:
-     - ./core:/var/www/core
+      - ./frontend:/var/www/html
 
   db:
     environment:
@@ -27,6 +35,7 @@ services:
       context: ./proxy-server
     depends_on:
       - core
+      - frontend
     image: "proxy-server"
     ports:
       - 80:80
