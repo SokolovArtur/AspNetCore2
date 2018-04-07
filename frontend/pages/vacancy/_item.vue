@@ -1,30 +1,35 @@
 <template>
-  <section id="page__index">
+  <section id="page__vacancy-params">
     <div class="container">
-      <div class="row">
-        <div class="col-10 col-m-15 col-xs-30 py-5" v-for="vacancy in vacancies">
-          <Card class="bg-light-gray"
-                :link="'/vacancy/' + vacancy.id"
-                :subtitle="vacancy.cities"
-                :text="vacancy.annotation"
-                :title="vacancy.name"
-          ></Card>
-        </div>
+      <div class="vacancy py-5">
+        <h3 class="vacancy__name" v-html="vacancy.name"></h3>
+        <div class="vacancy__cities c-dark-grey mb-5" v-html="vacancy.cities"></div>
+        <div class="vacancy__text" v-html="vacancy.text"></div>
+      </div>
+      <div class="link-back">
+        <nuxt-link to="/">Вернуться назад</nuxt-link>
       </div>
     </div>
   </section>
 </template>
 
 <script type="text/javascript">
-  import Card from '~/components/Card';
+  import _ from 'lodash';
 
   export default {
-    components: {
-      Card
+    validate ({ params }) {
+      return /^\d+$/.test(params.item);
     },
 
     data() {
       return {
+        vacancy: {
+          id: 1,
+          name: '',
+          cities: '',
+          annotation: '',
+          text: ''
+        },
         vacancies: [
           {
             id: 1,
@@ -62,6 +67,29 @@
             text: '<p>Открываем вакансию, чтобы найти уникального человека для развития новых продуктов и сервисов. Почему мы ищем Product owner? Сейчас есть много идей и гипотез, которые помогут Точке стать ещё лучше, а наших клиентов сделают счастливее. Чтобы проработать эти гипотезы и в будущем сделать новый, уникальный продукт, ищем единомышленников.</p><h3>Мы ждем, что человек возьмёт на себя ответственность за:</h3><ul><li>Рост и развитие нового продукта в Точке.</li><li>Работу с продуктовой командой.</li><li>Формирование и приоритизацию бэклога.</li><li>Валидацию продуктовых гипотез.</li><li>Управление ожиданиями стейкхолдеров.</li><li>Синхронизацию видения продукта с другими командами кластера.</li></ul><h3>Успешный кандидат должен иметь:</h3><ul><li>Опыт работы в роли владельца продукта/предпринимателя от 1 года. Плюсом будет наличие кейсов в личном портфолио.</li><li>Идеально, если был опыт работы над собственным стартапом.</li><li>Предпринимательские навыки.</li><li>Драйвить и зажигать команду и людей, с которыми работает.</li><li>Проактивную жизненную позицию.</li><li>Понимание роли владельца продукта и основные инструменты и принципы продуктовой разработки.</li><li>Опыт работы со стейкхолдерами топ-уровня компании.</li></ul><h3>От нас:</h3><ul><li>Теплая и дружественная атмосфера в команде, ты будешь работать с признанными профи.</li><li>Постоянное внешнее и внутреннее обучение за счёт компании.</li><li>Используем лучшие практики разработки ПО: agile, автоматизация процесса, непрерывная интеграция.</li><li>Масштабные задачи: сотни тысяч предпринимателей по всей стране будут использовать твои разработки.</li><li>Уютная комната отдыха, настольный футбол, аркадный автомат, кофе поинты и кальянные.</li><li>Все радости предусмотренные трудовым законодательством, а также медицинская страховка и компенсация обедов.</li><li>График работы 5/2 – начало и окончание рабочего дня – гибкое.</li><li>Уютный офис в центре города в 5 минутах от метро.</li><li>Комфортная зарплата, которая оправдывает ожидания.</li></ul>'
           }
         ]
+      }
+    },
+
+    created() {
+      const vacancy = this.findById(this.$route.params.item);
+
+      if (_.isEmpty(vacancy)) {
+        this.$root.error({statusCode: 404});
+      }
+
+      this.vacancy = {
+        id: vacancy.id,
+        name: vacancy.name,
+        cities: vacancy.cities,
+        annotation: vacancy.annotation,
+        text: vacancy.text
+      }
+    },
+
+    methods: {
+      findById(id) {
+        let key = _.findKey(this.vacancies, function(item) { return item.id == id; });
+        return (key == undefined) ? {} : this.vacancies[key];
       }
     }
   }
