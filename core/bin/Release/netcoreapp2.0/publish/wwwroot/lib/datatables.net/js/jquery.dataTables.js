@@ -10243,7 +10243,7 @@
 		 *      } );
 		 *    } );
 		 */
-		"bAutoWidth": true,
+		"bAutoWidth": false,
 	
 	
 		/**
