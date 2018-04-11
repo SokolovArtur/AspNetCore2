@@ -1,15 +1,12 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Tochka.Areas.Accounts.Data;
-using Tochka.Areas.Geodata.Services;
-using Tochka.Areas.Hr.Services;
-using Tochka.Data;
-using Tochka.Services;
 
 namespace Tochka
 {
@@ -25,30 +22,6 @@ namespace Tochka
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
-
-            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
-                {
-                    options.Password.RequireNonAlphanumeric = false;
-                })
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
-
-            services.Configure<SecurityStampValidatorOptions>(
-                options => { options.ValidationInterval = TimeSpan.FromMinutes(5); });
-            services.ConfigureApplicationCookie(options =>
-            {
-                options.LoginPath = "/Backend/Accounts/Auth/Login";
-                options.LogoutPath = "/Backend/Accounts/Auth/Logout";
-            });
-
-            // Add application services.
-            services.AddTransient<IEmailSender, EmailSender>();
-
-            services.AddTransient<ICityRepository, EFCityRepository>();
-            services.AddTransient<IVacancyRepository, EFVacancyRepository>();
-
             services.AddMvc();
         }
 
@@ -58,27 +31,27 @@ namespace Tochka
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseBrowserLink();
-                app.UseDatabaseErrorPage();
+                app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
+                {
+                    HotModuleReplacement = true
+                });
             }
             else
             {
-                app.UseExceptionHandler("/Backend/Home/Error");
+                app.UseExceptionHandler("/Home/Error");
             }
 
             app.UseStaticFiles();
 
-            app.UseAuthentication();
-
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
-                    name: "area",
-                    template: "Backend/{area:exists}/{controller=Home}/{action=Index}/{id?}");
-
-                routes.MapRoute(
                     name: "default",
-                    template: "Backend/{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Home}/{action=Index}/{id?}");
+
+                routes.MapSpaFallbackRoute(
+                    name: "spa-fallback",
+                    defaults: new { controller = "Home", action = "Index" });
             });
         }
     }

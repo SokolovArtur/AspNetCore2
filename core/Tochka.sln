@@ -1,7 +1,9 @@
-
+﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tochka", "Tochka.csproj", "{4C86AE0C-8266-4D9D-AC04-840C27117857}"
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2027
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tochka", "Tochka.csproj", "{7959D359-9AE2-443B-AF9D-845BC022EB4E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,9 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4C86AE0C-8266-4D9D-AC04-840C27117857}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4C86AE0C-8266-4D9D-AC04-840C27117857}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4C86AE0C-8266-4D9D-AC04-840C27117857}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4C86AE0C-8266-4D9D-AC04-840C27117857}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7959D359-9AE2-443B-AF9D-845BC022EB4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7959D359-9AE2-443B-AF9D-845BC022EB4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7959D359-9AE2-443B-AF9D-845BC022EB4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7959D359-9AE2-443B-AF9D-845BC022EB4E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A91EB54C-C869-4A04-880A-F89E7A4DC377}
 	EndGlobalSection
 EndGlobal
