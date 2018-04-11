@@ -1,33 +1,33 @@
 # AspNetCore2
 
-## Core (backend)
+## Установка и настройка
 
-### Установка и настройка
+### Docker
 
-1. Выполняем команду `docker-compose up --build -d`
-2. Заходим в контейнер `docker exec -ti aspnetcore2_core_1 /bin/bash`
-3. Выполняем миграцию `dotnet ef database update` (строка подключения appsettings.json)
-4. Выходим из контейнера `exit`
+Или режим тестера. Можно посмотреть что все запустилось и работает, но не подходит для разработки.
 
-### Учетные записи
+Вам понадобиться:
 
-* root - Pa$$w0rd
-* nobody - Pa$$w0rd
-* anonymous - Pa$$w0rd
+* Docker https://www.docker.com/
 
-### Повседневная работа
+Step by step:
 
-Для разработки используйте Visual Studio IDE. Чтобы собрать решение нужно пересобрать образы докер.
+1. Переходим в папку `cd .../AspNetCore2` 
+2. Выполняем команду `docker-compose up --build -d` 
 
-## Frontend
+### Локально
 
-### Установка и настройка
+Вам понадобиться:
 
-1. Выполняем команду `docker-compose up --build -d` (если не выполнили раньше)
-2. Заходим в контейнер `docker exec -ti aspnetcore2_frontend_1 /bin/bash`
-3. Устанавливаем пакеты `npm install`
-4. Выходим из контейнера `exit`
+* .NET Core SDK https://www.microsoft.com/net/download/
+* Node.js https://nodejs.org/
 
-### Повседневная работа
+Step by step:
 
-Выполняйте `npm run generate` в контейнере фронта чтобы увидеть ваши изменения.
+1. Переходим в папку `cd .../AspNetCore2/core` 
+2. Устанавливаем зависимости `npm install` и `dotnet restore`
+3. Запускаем `dotnet run`
+
+## Повседневная работа
+
+Для разработки рекомендую использовать Visual Studio Code.

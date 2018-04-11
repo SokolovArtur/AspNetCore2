@@ -9,17 +9,6 @@ services:
     expose:
       - 5000
     image: "core"
-#    volumes:
-#     - ./core:/var/www/core
-
-  frontend:
-    build:
-      context: ./frontend
-    expose:
-      - 80
-    image: "frontend"
-    volumes:
-      - ./frontend:/var/www/html
 
   db:
     environment:
@@ -27,15 +16,12 @@ services:
     image: postgres:10
     ports:
       - 5432:5432
-    volumes:
-      - ./db:/var/lib/postgresql/data
 
   proxy-server:
     build:
       context: ./proxy-server
     depends_on:
       - core
-      - frontend
     image: "proxy-server"
     ports:
       - 80:80
