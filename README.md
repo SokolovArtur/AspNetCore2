@@ -25,7 +25,7 @@ Step by step:
 Step by step:
 
 1. Переходим в папку `cd .../AspNetCore2/core` 
-2. Устанавливаем зависимости `npm install` и `dotnet restore`
+2. Устанавливаем зависимости `yarn` и `dotnet restore`
 3. Запускаем `dotnet run`
 
 ## Повседневная работа

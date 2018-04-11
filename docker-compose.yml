@@ -16,6 +16,8 @@ services:
     image: postgres:10
     ports:
       - 5432:5432
+    volumes:
+      - 'db_data:/var/lib/postgresql/data'
 
   proxy-server:
     build:
@@ -25,3 +27,6 @@ services:
     image: "proxy-server"
     ports:
       - 80:80
+
+volumes:
+  db_data:
