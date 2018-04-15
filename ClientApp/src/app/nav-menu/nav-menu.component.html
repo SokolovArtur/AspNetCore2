@@ -1,0 +1,18 @@
+<div class="navbar">
+    <div class="row mb-5 navbar__header">
+        <a class="navbar__brand" [routerLink]="['/']">
+            <img src="/assets/images/tochka_logo.svg"/>
+        </a>
+    </div>
+    <div class="row navbar__collapse" [ngClass]='{ "in": isExpanded }'>
+        <div class="col-30 p-5 col-m-auto navbar__collapse-nav" [routerLinkActive]="['bg-light-gray']" [routerLinkActiveOptions]="{ exact: true }">
+            <a [routerLink]="['/']">Home</a>
+    </div>
+        <div class="col-30 p-5 col-m-auto navbar__collapse-nav" [routerLinkActive]="['bg-light-gray']">
+            <a [routerLink]="['/counter']">Counter</a>
+        </div>
+        <div class="col-30 p-5 col-m-auto navbar__collapse-nav" [routerLinkActive]="['bg-light-gray']">
+            <a [routerLink]="['/fetch-data']">Fetch data</a>
+        </div>
+    </div>
+</div>

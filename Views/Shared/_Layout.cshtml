@@ -1,0 +1,125 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewData["Title"] - Tochka</title>
+
+    <environment include="Development">
+        <link rel="stylesheet" href="~/lib/Font-Awesome/css/font-awesome.css" />
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="~/lib/MDBootstrap/css/mdb.css" />
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="~/lib/Font-Awesome/css/font-awesome.min.css" />
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="~/lib/MDBootstrap/css/mdb.min.css" />
+    </environment>
+
+    @RenderSection("StyleSheet", required: false)
+
+    <environment include="Development">
+        <link rel="stylesheet" href="~/admin-panel/css/site.css" asp-append-version="true" />
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="~/admin-panel/css/site.min.css" asp-append-version="true" />
+    </environment>
+
+    <link rel="icon" type="image/x-icon" href="/admin-panel/favicon.ico" />
+</head>
+<body class="fixed-sn light-blue-skin">
+    <!--Main Navigation-->
+    <header>
+        <!--Navbar-->
+        <nav class="navbar navbar-expand-lg navbar-dark double-nav fixed-top scrolling-navbar">
+            <!-- SideNav slide-out button -->
+            <div class="float-left">
+                <a href="#" data-activates="slide-out" class="button-collapse">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+            <!--/. SideNav slide-out button -->
+        </nav>
+        <!--/. Navbar -->
+
+        <!-- Sidebar navigation -->
+        <div id="slide-out" class="side-nav fixed sn-bg-4">
+            <ul class="custom-scrollbar list-unstyled">
+                <!-- Logo -->
+                <li>
+                    <div class="logo-wrapper waves-light">
+                        <a asp-area="" asp-controller="Home" asp-action="Index">
+                            <img src="~/admin-panel/images/tochka_logo.svg" class="img-fluid flex-center">
+                        </a>
+                    </div>
+                </li>
+
+                <!-- Side navigation links -->
+                <li>
+                    <ul class="collapsible collapsible-accordion">
+                        <li>
+                            <a class="collapsible-header waves-effect arrow-r"><i class="fa fa-chevron-right"></i> Main menu<i class="fa fa-angle-down rotate-icon"></i></a>
+                            <div class="collapsible-body">
+                                <ul>
+                                    <li><a asp-area="" asp-controller="Home" asp-action="Index" class="waves-effect">Home</a></li>
+                                </ul>
+                                <ul>
+                                    <li><a asp-area="" asp-controller="Home" asp-action="About" class="waves-effect">About</a></li>
+                                </ul>
+                                <ul>
+                                    <li><a asp-area="" asp-controller="Home" asp-action="Contact" class="waves-effect">Contact</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+                <!--/. Side navigation links -->
+            </ul>
+            <div class="sidenav-bg mask-strong"></div>
+        </div>
+        <!--/. Sidebar navigation -->
+    </header>
+    <!--/. Main Navigation-->
+
+    <!-- Main layout -->
+    <main>
+        <div class="container-fluid">
+            @RenderBody()
+        </div>
+    </main>
+    <!--/. Main layout -->
+
+    <!-- Footer -->
+    <footer class="page-footer center-on-small-only ">
+        <!-- Copyright -->
+        <div class="footer-copyright">
+            <div class="container-fluid">
+                &copy; 2018 - Tochka
+            </div>
+        </div>
+        <!--/. Copyright -->
+    </footer>
+    <!--/. Footer -->
+
+    <environment include="Development">
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/lib/MDBootstrap/js/mdb.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="~/lib/MDBootstrap/js/mdb.min.js"></script>
+    </environment>
+
+    @RenderSection("Scripts", required: false)
+
+    <environment include="Development">
+        <script src="~/admin-panel/js/site.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/admin-panel/js/site.min.js" asp-append-version="true"></script>
+    </environment>
+</body>
+</html>
